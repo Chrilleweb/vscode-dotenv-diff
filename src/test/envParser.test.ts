@@ -2,7 +2,7 @@ import * as assert from "assert";
 import * as fs from "fs";
 import * as os from "os";
 import * as path from "path";
-import { parseEnvKeys } from "../envParser";
+import { parseEnvKeys } from "../core/envParser";
 
 suite("envParser", () => {
   let tmpFile: string;

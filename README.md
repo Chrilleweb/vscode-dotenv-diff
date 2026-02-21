@@ -2,27 +2,27 @@
 
 > Catch missing and unused environment variables before they catch you.
 
-`dotenv-diff` is a lightweight VS Code extension that warns you when your code references environment variables that aren't defined in your `.env` file — and when your `.env` file has variables that are never used in your code.
+`vscode-dotenv-diff` is a lightweight VS Code extension that warns you when your code references environment variables that aren't defined in your `.env` file — and when your `.env` file has variables that are never used in your code.
 
 ---
 
 ## Features
 
-### ⚠️ Missing variables in code
+### Missing variables in code
 If your `.ts` or `.js` file references `process.env.MY_KEY` and `MY_KEY` is not defined in the nearest `.env` file, you'll see a warning underline directly in the editor.
 
 ```
 Environment variable "MY_KEY" is not defined in .env
 ```
 
-### ⚠️ Unused variables in `.env`
+### Unused variables in `.env`
 If a key in your `.env` file is never referenced in any open source file, the line is flagged with a warning.
 
 ```
 Environment variable "MY_KEY" is defined but never used
 ```
 
-### 📁 Monorepo support — zero config
+### Monorepo support — zero config
 The extension automatically finds the nearest `.env` file by walking up the directory tree from your source file. No configuration needed.
 
 ```
@@ -76,6 +76,15 @@ This extension has no configuration. It works out of the box.
 - Only **open documents** are scanned (not the full workspace)
 - Only `UPPER_CASE` env key names are matched (standard convention)
 - Dynamic keys like `` process.env[`key_${name}`] `` are not supported
+
+---
+
+## Documentation
+
+Full documentation is available in the [`docs/`](./docs/index.md) folder:
+
+- [Capabilities](./docs/capabilities.md) — what the extension can do
+- [Architecture](./docs/architecture.md) — how the codebase is structured
 
 ---
 

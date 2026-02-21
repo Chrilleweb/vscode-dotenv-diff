@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
-import { parseEnvKeys } from "./envParser";
-import { scanForEnvUsages } from "./scanner";
-import { findNearestEnv } from "./fileWalker";
+import { parseEnvKeys } from "./core/envParser";
+import { scanForEnvUsages } from "./core/scanner";
+import { findNearestEnv } from "./core/fileWalker";
 
 /**
  * The single DiagnosticCollection that owns all our warnings.

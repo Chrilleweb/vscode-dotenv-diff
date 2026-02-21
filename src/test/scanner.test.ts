@@ -1,5 +1,5 @@
 import * as assert from "assert";
-import { scanForEnvUsages } from "../scanner";
+import { scanForEnvUsages } from "../core/scanner";
 
 suite("scanner", () => {
   test("finds dot notation usage", () => {
@@ -30,7 +30,7 @@ suite("scanner", () => {
     assert.strictEqual(usages.length, 3);
     assert.deepStrictEqual(
       usages.map((u) => u.key),
-      ["KEY_ONE", "KEY_TWO", "KEY_THREE"]
+      ["KEY_ONE", "KEY_TWO", "KEY_THREE"],
     );
   });
 
