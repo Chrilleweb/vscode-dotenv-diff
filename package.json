@@ -7,7 +7,7 @@
     "vscode": "^1.109.0"
   },
   "categories": [
-    "Other"
+    "Linters"
   ],
   "main": "./out/extension.js",
   "activationEvents": [
@@ -16,6 +16,7 @@
     "workspaceContains:**/.env"
   ],
   "contributes": {},
+  "sideEffects": false,
   "scripts": {
     "vscode:prepublish": "pnpm run compile",
     "compile": "tsc -p ./",
@@ -23,6 +24,16 @@
     "pretest": "pnpm run compile && pnpm run lint",
     "lint": "eslint src",
     "test": "vscode-test"
+  },
+  "author": "Chrilleweb",
+  "publisher": "Chrilleweb",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Chrilleweb/vscode-dotenv-diff.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Chrilleweb/vscode-dotenv-diff/issues"
   },
   "devDependencies": {
     "@types/vscode": "^1.109.0",
