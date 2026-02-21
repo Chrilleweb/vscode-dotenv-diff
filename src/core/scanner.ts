@@ -22,19 +22,36 @@ export interface EnvUsage {
 const ENV_PATTERN =
   /process\.env\.([A-Z_][A-Z0-9_]*)|process\.env\[['"]([A-Z_][A-Z0-9_]*)['"]]/g;
 
-  /**
+/**
  * Scans the given source code text for all occurrences of process.env.KEY
- * and returns an array of EnvUsage objects with the key name and position.
+ * This will also ignore comments (both single-line and block comments) to avoid false positives.
  * @param sourceText The full text of the source code to scan
- * @return An array of EnvUsage objects representing each environment variable usage found 
+ * @return An array of EnvUsage objects representing each environment variable usage found
  */
 export function scanForEnvUsages(sourceText: string): EnvUsage[] {
   const usages: EnvUsage[] = [];
   let match: RegExpExecArray | null;
 
   while ((match = ENV_PATTERN.exec(sourceText)) !== null) {
-    // Group 1 = dot notation, group 2 = bracket notation
     const key = match[1] ?? match[2];
+
+    // Find which line this match is on
+    const lineStart = sourceText.lastIndexOf("\n", match.index) + 1;
+    const lineContent = sourceText.slice(lineStart, match.index);
+
+    // Skip if the match is inside a single-line comment (// ...)
+    if (lineContent.trimStart().startsWith("//")) {
+      continue;
+    }
+
+    // Skip block comments: /* ... */ and /** ... */
+    const textUpToMatch = sourceText.slice(0, match.index);
+    const lastBlockOpen = textUpToMatch.lastIndexOf("/*");
+    const lastBlockClose = textUpToMatch.lastIndexOf("*/");
+    if (lastBlockOpen > lastBlockClose) {
+      continue;
+    }
+
     usages.push({ key, index: match.index });
   }
 
