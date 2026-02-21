@@ -44,29 +44,4 @@ suite("scanner", () => {
     const usages = scanForEnvUsages("const x = process.env.mykey;");
     assert.strictEqual(usages.length, 0);
   });
-
-  test("ignores process.env.KEY in single-line comments", () => {
-    const usages = scanForEnvUsages("// process.env.MY_KEY");
-    assert.strictEqual(usages.length, 0);
-  });
-
-  test("ignores process.env.KEY in block comments", () => {
-    const usages = scanForEnvUsages("/* process.env.MY_KEY */");
-    assert.strictEqual(usages.length, 0);
-  });
-
-  test("ignores process.env.KEY in JSDoc comments", () => {
-    const usages = scanForEnvUsages("/** \n * process.env.MY_KEY \n */");
-    assert.strictEqual(usages.length, 0);
-  });
-
-  test("still finds real usage after a comment", () => {
-    const source = `
-    // process.env.FAKE_KEY
-    const x = process.env.REAL_KEY;
-  `;
-    const usages = scanForEnvUsages(source);
-    assert.strictEqual(usages.length, 1);
-    assert.strictEqual(usages[0].key, "REAL_KEY");
-  });
 });

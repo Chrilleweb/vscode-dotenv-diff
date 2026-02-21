@@ -1,3 +1,5 @@
+import { isInComment } from "./commentDetector";
+
 /**
  * Scans source code text for all process.env.KEY references.
  * Returns an array of matches with the key name and its position.
@@ -35,20 +37,7 @@ export function scanForEnvUsages(sourceText: string): EnvUsage[] {
   while ((match = ENV_PATTERN.exec(sourceText)) !== null) {
     const key = match[1] ?? match[2];
 
-    // Find which line this match is on
-    const lineStart = sourceText.lastIndexOf("\n", match.index) + 1;
-    const lineContent = sourceText.slice(lineStart, match.index);
-
-    // Skip if the match is inside a single-line comment (// ...)
-    if (lineContent.trimStart().startsWith("//")) {
-      continue;
-    }
-
-    // Skip block comments: /* ... */ and /** ... */
-    const textUpToMatch = sourceText.slice(0, match.index);
-    const lastBlockOpen = textUpToMatch.lastIndexOf("/*");
-    const lastBlockClose = textUpToMatch.lastIndexOf("*/");
-    if (lastBlockOpen > lastBlockClose) {
+    if (isInComment(sourceText, match.index)) {
       continue;
     }
 

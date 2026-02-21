@@ -1,4 +1,4 @@
-# vscode-dotenv-diff 🔍
+# vscode-dotenv-diff
 
 > Catch missing and unused environment variables before they catch you.
 
