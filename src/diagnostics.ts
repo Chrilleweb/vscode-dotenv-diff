@@ -2,6 +2,7 @@ import * as vscode from "vscode";
 import { parseEnvKeys } from "./core/envParser";
 import { scanForEnvUsages } from "./core/scanner";
 import { findNearestEnv } from "./core/fileWalker";
+import { ENV_FILE_NAME } from "./core/constants";
 
 /**
  * The single DiagnosticCollection that owns all our warnings.
@@ -48,7 +49,7 @@ export function refreshAllDiagnostics(
 
         const diagnostic = new vscode.Diagnostic(
           range,
-          `Environment variable "${usage.key}" is not defined in .env`,
+          `Environment variable "${usage.key}" is not defined in ${ENV_FILE_NAME}`,
           vscode.DiagnosticSeverity.Warning,
         );
         diagnostic.source = "dotenv-diff";
@@ -97,7 +98,7 @@ export function refreshAllDiagnostics(
         const range = new vscode.Range(lineIndex, 0, lineIndex, key.length);
         const diagnostic = new vscode.Diagnostic(
           range,
-          `Environment variable "${key}" is defined but never used`,
+          `Environment variable "${key}" is defined but never used in ${ENV_FILE_NAME}`,
           vscode.DiagnosticSeverity.Warning,
         );
         diagnostic.source = "dotenv-diff";
@@ -124,5 +125,5 @@ function isSourceFile(doc: vscode.TextDocument): boolean {
  * @returns True if the document's filename ends with .env, false otherwise
  */
 function isEnvFile(doc: vscode.TextDocument): boolean {
-  return doc.fileName.endsWith(".env");
+  return doc.fileName.endsWith(ENV_FILE_NAME);
 }

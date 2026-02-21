@@ -1,5 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
+import { ENV_FILE_NAME } from "./constants";
 
 /**
  * Walks up the directory tree from a given file path
@@ -16,7 +17,7 @@ export function findNearestEnv(filePath: string): string | null {
 
   // Walk up until we hit the filesystem root
   while (true) {
-    const candidate = path.join(dir, ".env");
+    const candidate = path.join(dir, ENV_FILE_NAME);
 
     if (fs.existsSync(candidate)) {
       return candidate;
