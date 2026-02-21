@@ -1,71 +1,84 @@
-# dotenv-diff README
+# vscode-dotenv-diff 🔍
 
-This is the README for your extension "dotenv-diff". After writing up a brief description, we recommend including the following sections.
+> Catch missing and unused environment variables before they catch you.
 
-## Features
-
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
-
-For example if there is an image subfolder under your extension project workspace:
-
-\!\[feature X\]\(images/feature-x.png\)
-
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
-
-## Requirements
-
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
-
-## Extension Settings
-
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
+`dotenv-diff` is a lightweight VS Code extension that warns you when your code references environment variables that aren't defined in your `.env` file — and when your `.env` file has variables that are never used in your code.
 
 ---
 
-## Following extension guidelines
+## Features
 
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
+### ⚠️ Missing variables in code
+If your `.ts` or `.js` file references `process.env.MY_KEY` and `MY_KEY` is not defined in the nearest `.env` file, you'll see a warning underline directly in the editor.
 
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
+```
+Environment variable "MY_KEY" is not defined in .env
+```
 
-## Working with Markdown
+### ⚠️ Unused variables in `.env`
+If a key in your `.env` file is never referenced in any open source file, the line is flagged with a warning.
 
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
+```
+Environment variable "MY_KEY" is defined but never used
+```
 
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
+### 📁 Monorepo support — zero config
+The extension automatically finds the nearest `.env` file by walking up the directory tree from your source file. No configuration needed.
 
-## For more information
+```
+apps/
+├── frontend/
+│   ├── .env          ← used for files inside frontend/
+│   └── src/
+│       └── app.ts
+└── backend/
+    ├── .env          ← used for files inside backend/
+    └── src/
+        └── server.ts
+```
 
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
+---
 
-**Enjoy!**
+## How it works
+
+- Scans all **open** `.ts` and `.js` files for `process.env.KEY` references
+- Parses the **nearest** `.env` file for each source file
+- Compares the two and produces warnings in the **Problems** panel (`Cmd+Shift+M`)
+- Re-runs automatically when you open, edit, save, or close a file
+
+---
+
+## Supported syntax
+
+```typescript
+process.env.MY_KEY          // dot notation
+process.env["MY_KEY"]       // bracket notation (double quotes)
+process.env['MY_KEY']       // bracket notation (single quotes)
+```
+
+---
+
+## Requirements
+
+- VS Code `1.60.0` or higher
+- A `.env` file somewhere in your project tree
+
+---
+
+## Extension settings
+
+This extension has no configuration. It works out of the box.
+
+---
+
+## Known limitations
+
+- Only **open documents** are scanned (not the full workspace)
+- Only `UPPER_CASE` env key names are matched (standard convention)
+- Dynamic keys like `` process.env[`key_${name}`] `` are not supported
+
+---
+
+## Feedback & contributions
+
+Found a bug or have a feature request? Open an issue on [GitHub](https://github.com/Chrilleweb/vscode-dotenv-diff/issues).
