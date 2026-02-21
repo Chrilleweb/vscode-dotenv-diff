@@ -1,5 +1,26 @@
 # Changelog
 
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## Unreleased
+
+- "You miss 100 percent of the chances you don't take. — Wayne Gretzky" — Michael Scott
+
+## 0.2.0 (2026-02-21)
+
+### ✨ Features
+
+* ignore comments ([fccdbe1](https://github.com/Chrilleweb/vscode-dotenv-diff/commit/fccdbe12c186e9f6a72cad7cd39e01af67fd775c))
+
+### 📝 Documentation
+
+* documentation ([7d71127](https://github.com/Chrilleweb/vscode-dotenv-diff/commit/7d71127cc646593cde0a5b260a925ba13af8a0dd))
+
+# Changelog
+
 All notable changes to **vscode-dotenv-diff** will be documented here.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
