@@ -23,7 +23,9 @@
     "watch": "tsc -watch -p ./",
     "pretest": "pnpm run compile && pnpm run lint",
     "lint": "eslint src",
-    "test": "vscode-test"
+    "test": "vscode-test",
+    "release": "release-it",
+    "release:dry": "release-it --dry-run"
   },
   "author": "Chrilleweb",
   "publisher": "Chrilleweb",
