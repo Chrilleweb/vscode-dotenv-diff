@@ -116,7 +116,13 @@ export function refreshAllDiagnostics(
  * @returns True if the document is a .ts or .js file, false otherwise
  */
 function isSourceFile(doc: vscode.TextDocument): boolean {
-  return doc.languageId === "typescript" || doc.languageId === "javascript";
+  return (
+    (doc.languageId === "typescript" || doc.languageId === "javascript") &&
+    !doc.fileName.endsWith(".test.ts") &&
+    !doc.fileName.endsWith(".test.js") &&
+    !doc.fileName.endsWith(".spec.ts") &&
+    !doc.fileName.endsWith(".spec.js")
+  );
 }
 
 /**
