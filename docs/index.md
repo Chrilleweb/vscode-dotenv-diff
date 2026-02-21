@@ -25,5 +25,5 @@ When building applications, it's easy to reference `process.env.MY_KEY` in your 
 
 - [GitHub Repository](https://github.com/Chrilleweb/vscode-dotenv-diff)
 - [Issue Tracker](https://github.com/Chrilleweb/vscode-dotenv-diff/issues)
-- [VS Code Marketplace](#) *(coming soon)*
+- [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=Chrilleweb.dotenv-diff)
 - [CHANGELOG](../CHANGELOG.md)

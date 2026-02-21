@@ -18,8 +18,8 @@ DB_PORT=5432
 
 `apps/frontend/src/app.ts`
 ```typescript
-const host = process.env.DB_HOST;     // ✅ defined in .env
-const secret = process.env.SECRET;    // ⚠️ not defined in .env
+const host = process.env.DB_HOST;     // defined in .env
+const secret = process.env.SECRET;    // not defined in .env
 ```
 
 **Warning message:**
@@ -37,8 +37,8 @@ When a key is defined in a `.env` file but never referenced in any open source f
 
 `.env`
 ```
-DB_HOST=localhost      # ✅ used in open source files
-LEGACY_TOKEN=abc123    # ⚠️ not used anywhere
+DB_HOST=localhost      # used in open source files
+LEGACY_TOKEN=abc123    # not used anywhere
 ```
 
 **Warning message:**
@@ -99,7 +99,7 @@ All warnings appear in the **Problems panel** (`Cmd+Shift+M` on Mac, `Ctrl+Shift
 
 ## 6. Only open documents are scanned
 
-In v0.1.0, the extension only scans files that are currently open in the editor. It does not crawl the entire workspace. This keeps performance fast and predictable.
+The extension only scans files that are currently open in the editor. It does not crawl the entire workspace. This keeps performance fast and predictable.
 
 ---
 
@@ -107,4 +107,4 @@ In v0.1.0, the extension only scans files that are currently open in the editor.
 
 - Dynamic key access like `` process.env[`key_${name}`] `` is not supported
 - Only `UPPER_CASE` keys are matched
-- `.env.local`, `.env.production` etc. are not resolved in v0.1.0 — only `.env`
+- `.env.local`, `.env.production` etc. are not resolved — only `.env`
