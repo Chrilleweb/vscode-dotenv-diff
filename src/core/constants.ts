@@ -5,6 +5,19 @@
 export const ENV_FILE_NAME = ".env";
 
 /**
+ * Glob pattern for finding source files in the workspace.
+ * Used by vscode.workspace.findFiles() on startup.
+ */
+export const SOURCE_FILE_GLOB = "**/*.{ts,js,mjs,cjs,mts,cts}";
+
+/**
+ * Glob pattern for excluding files from workspace scanning.
+ * Excludes node_modules and test/spec files.
+ */
+export const EXCLUDE_FILE_GLOB =
+  "{**/node_modules/**,**/*.test.ts,**/*.test.js,**/*.test.mjs,**/*.test.cjs,**/*.test.mts,**/*.test.cts,**/*.spec.ts,**/*.spec.js,**/*.spec.mjs,**/*.spec.cjs,**/*.spec.mts,**/*.spec.cts}";
+
+/**
  * Matches process.env.KEY references in source code.
  * Supports both dot notation and bracket notation.
  *
