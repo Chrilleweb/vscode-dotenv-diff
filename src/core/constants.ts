@@ -24,3 +24,22 @@ export const PROCESS_ENV_PATTERN =
  *   import.meta.env.VITE_API_URL
  */
 export const IMPORT_META_ENV_PATTERN = /import\.meta\.env\.([A-Z_][A-Z0-9_]*)/g;
+
+/**
+ * Matches env.KEY references in source code.
+ * Only used when a SvelteKit $env import is detected in the file.
+ * Uses negative lookbehind to avoid matching object.env.KEY or myenv.KEY.
+ *
+ * Example:
+ *   env.PUBLIC_API_URL
+ */
+export const SVELTEKIT_ENV_PATTERN = /(?<![.\w])env\.([A-Z_][A-Z0-9_]*)/g;
+
+/**
+ * Detects if a file imports from SvelteKit's $env module.
+ * Used to conditionally enable SVELTEKIT_ENV_PATTERN scanning.
+ *
+ * Example:
+ *   import { env } from '$env/dynamic/public'
+ */
+export const SVELTEKIT_ENV_IMPORT_PATTERN = /from\s+['"](\$env\/)/;

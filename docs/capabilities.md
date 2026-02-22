@@ -6,7 +6,7 @@ This document describes everything `vscode-dotenv-diff` can do, and how it behav
 
 ## 1. Missing environment variables
 
-When a `.ts` or `.js` file references `process.env.KEY` and that key is not present in the nearest `.env` file, the extension underlines the reference with a warning.
+When a `.ts` or `.js` file references an environment variable and that key is not present in the nearest `.env` file, the extension underlines the reference with a warning.
 
 ![Not Defined](./screenshots/not-defined.png)
 
@@ -84,6 +84,7 @@ process.env['MY_KEY']       // bracket notation, single quotes
 import.meta.env.MY_KEY       // dot notation
 import.meta.env["MY_KEY"]    // bracket notation, double quotes
 import.meta.env['MY_KEY']    // bracket notation, single quotes
+env.PUBLIC_API_URL; // SvelteKit $env usage
 ```
 
 Only `UPPER_CASE` key names are matched, which is the standard convention for environment variables.
