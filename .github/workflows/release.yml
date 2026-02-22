@@ -62,3 +62,8 @@ jobs:
         run: npm run release -- --ci
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish to VS Code Marketplace
+        run: npx vsce publish --no-git-tag-version
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
