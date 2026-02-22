@@ -1,7 +1,7 @@
 {
   "name": "dotenv-diff",
   "displayName": "Dotenv-diff",
-  "description": "Warns about missing or unused .env variables",
+  "description": "Catch missing and unused process.env variables against your .env file",
   "version": "0.2.0",
   "engines": {
     "vscode": "^1.109.0"
