@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - "You miss 100 percent of the chances you don't take. — Wayne Gretzky" — Michael Scott
 
+## [0.3.0](https://github.com/Chrilleweb/vscode-dotenv-diff/compare/v0.2.1...v0.3.0) (2026-02-22)
+
+### ✨ Features
+
+* support for import.meta.env ([#6](https://github.com/Chrilleweb/vscode-dotenv-diff/issues/6)) ([ec36e6b](https://github.com/Chrilleweb/vscode-dotenv-diff/commit/ec36e6b67d92c799c3c0fcf2266b8460a75c780d))
+
+### 📝 Documentation
+
+* updated docs ([#7](https://github.com/Chrilleweb/vscode-dotenv-diff/issues/7)) ([7d63018](https://github.com/Chrilleweb/vscode-dotenv-diff/commit/7d6301828df4d2c1272c3c6b1b434f976061f329))
+
 ## [0.2.1](https://github.com/Chrilleweb/vscode-dotenv-diff/compare/v0.2.0...v0.2.1) (2026-02-22)
 
 ### 🐛 Bug Fixes
