@@ -1,5 +1,10 @@
 import { isInComment } from "./commentDetector";
-import { PROCESS_ENV_PATTERN, IMPORT_META_ENV_PATTERN } from "./constants";
+import {
+  PROCESS_ENV_PATTERN,
+  IMPORT_META_ENV_PATTERN,
+  SVELTEKIT_ENV_IMPORT_PATTERN,
+  SVELTEKIT_ENV_PATTERN,
+} from "./constants";
 
 /**
  * Scans source code text for all process.env.KEY references.
@@ -21,9 +26,6 @@ export interface EnvUsage {
   index: number;
 }
 
-// Patterns to scan for environment variable usages. We will check both patterns in the same pass.
-const PATTERNS = [PROCESS_ENV_PATTERN, IMPORT_META_ENV_PATTERN];
-
 /**
  * Scans the given source code text for all occurrences of process.env.KEY
  * This will also ignore comments (both single-line and block comments) to avoid false positives.
@@ -33,7 +35,15 @@ const PATTERNS = [PROCESS_ENV_PATTERN, IMPORT_META_ENV_PATTERN];
 export function scanForEnvUsages(sourceText: string): EnvUsage[] {
   const usages: EnvUsage[] = [];
 
-  for (const pattern of PATTERNS) {
+  // Build patterns array fresh on each call
+  const patterns = [PROCESS_ENV_PATTERN, IMPORT_META_ENV_PATTERN];
+
+  // Only scan for env.KEY if file imports from SvelteKit's $env module
+  if (SVELTEKIT_ENV_IMPORT_PATTERN.test(sourceText)) {
+    patterns.push(SVELTEKIT_ENV_PATTERN);
+  }
+
+  for (const pattern of patterns) {
     let match: RegExpExecArray | null;
 
     while ((match = pattern.exec(sourceText)) !== null) {
