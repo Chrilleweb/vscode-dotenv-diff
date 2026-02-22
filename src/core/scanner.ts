@@ -7,16 +7,6 @@ import {
 } from "./constants";
 
 /**
- * Scans source code text for all process.env.KEY references.
- * Returns an array of matches with the key name and its position.
- *
- * Handles:
- *   process.env.MY_KEY
- *   process.env["MY_KEY"]
- *   process.env['MY_KEY']
- */
-
-/**
  * Represents a single usage of an environment variable in the source code.
  */
 export interface EnvUsage {
