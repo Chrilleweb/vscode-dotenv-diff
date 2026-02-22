@@ -1,5 +1,6 @@
 import * as vscode from "vscode";
 import * as fs from "fs";
+import { SOURCE_FILE_GLOB, EXCLUDE_FILE_GLOB } from "./core/constants";
 import {
   createDiagnosticCollection,
   refreshAllDiagnostics,
@@ -17,8 +18,8 @@ export async function activate(
   const collection = createDiagnosticCollection();
 
   const workspaceFiles = await vscode.workspace.findFiles(
-    "**/*.{ts,js}",
-    "{**/node_modules/**,**/*.test.ts,**/*.test.js,**/*.spec.ts,**/*.spec.js}",
+    SOURCE_FILE_GLOB,
+    EXCLUDE_FILE_GLOB,
   );
 
   const workspaceFileContents = new Map<string, string>();
