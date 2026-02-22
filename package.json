@@ -41,11 +41,11 @@
   "devDependencies": {
     "@release-it/conventional-changelog": "^10.0.5",
     "@types/mocha": "^10.0.10",
-    "@types/node": "22.x",
+    "@types/node": "25.x",
     "@types/vscode": "^1.109.0",
     "@vscode/test-cli": "^0.0.12",
     "@vscode/test-electron": "^2.5.2",
-    "eslint": "^9.39.2",
+    "eslint": "^10.0.1",
     "release-it": "^19.2.4",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.54.0"
