@@ -1,4 +1,5 @@
 import { isInComment } from "./commentDetector";
+import { PROCESS_ENV_PATTERN, IMPORT_META_ENV_PATTERN } from "./constants";
 
 /**
  * Scans source code text for all process.env.KEY references.
@@ -20,9 +21,8 @@ export interface EnvUsage {
   index: number;
 }
 
-// Matches: process.env.KEY or process.env["KEY"] or process.env['KEY']
-const ENV_PATTERN =
-  /process\.env\.([A-Z_][A-Z0-9_]*)|process\.env\[['"]([A-Z_][A-Z0-9_]*)['"]]/g;
+// Patterns to scan for environment variable usages. We will check both patterns in the same pass.
+const PATTERNS = [PROCESS_ENV_PATTERN, IMPORT_META_ENV_PATTERN];
 
 /**
  * Scans the given source code text for all occurrences of process.env.KEY
@@ -32,20 +32,22 @@ const ENV_PATTERN =
  */
 export function scanForEnvUsages(sourceText: string): EnvUsage[] {
   const usages: EnvUsage[] = [];
-  let match: RegExpExecArray | null;
 
-  while ((match = ENV_PATTERN.exec(sourceText)) !== null) {
-    const key = match[1] ?? match[2];
+  for (const pattern of PATTERNS) {
+    let match: RegExpExecArray | null;
 
-    if (isInComment(sourceText, match.index)) {
-      continue;
+    while ((match = pattern.exec(sourceText)) !== null) {
+      const key = match[1] ?? match[2];
+
+      if (isInComment(sourceText, match.index)) {
+        continue;
+      }
+
+      usages.push({ key, index: match.index });
     }
 
-    usages.push({ key, index: match.index });
+    pattern.lastIndex = 0;
   }
-
-  // Reset regex state (important for global regex reuse)
-  ENV_PATTERN.lastIndex = 0;
 
   return usages;
 }

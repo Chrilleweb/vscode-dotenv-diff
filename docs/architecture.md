@@ -58,11 +58,23 @@ No side effects, no VS Code dependency — fully unit testable.
 
 ---
 
+### `core/constants.ts`
+
+A constants module. Responsible for:
+
+- Defining constant values used across the core modules
+- Centralising regex patterns for environment variable detection
+- Ensuring consistency and avoiding magic strings
+
+No side effects, no VS Code dependency.
+
+---
+
 ### `core/scanner.ts`
 
 A pure function module. Responsible for:
 
-- Matching `process.env.KEY` patterns in raw source text
+- Matching environment variable patterns in raw source text
 - Supporting dot notation and bracket notation
 - Returning an array of `{ key, index }` objects
 

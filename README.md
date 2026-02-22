@@ -5,9 +5,7 @@
 [![Installs](https://img.shields.io/visual-studio-marketplace/i/Chrilleweb.dotenv-diff)](https://marketplace.visualstudio.com/items?itemName=Chrilleweb.dotenv-diff)
 [![Rating](https://img.shields.io/visual-studio-marketplace/r/Chrilleweb.dotenv-diff)](https://marketplace.visualstudio.com/items?itemName=Chrilleweb.dotenv-diff)
 
-`vscode-dotenv-diff` is a lightweight VS Code extension that warns you when your `.ts` or `.js` files reference environment variables (`process.env`) that aren't defined in your `.env` file — and when your `.env` file has variables that are never used in your codebase.
-
-> Note: This extension only checks for `process.env` references
+`vscode-dotenv-diff` is a lightweight VS Code extension that warns you when your `.ts` or `.js` files reference environment variables that aren't defined in your `.env` file — and when your `.env` file has variables that are never used in your codebase.
 
 ---
 
@@ -33,7 +31,7 @@ If a key in your `.env` file is never referenced, the line is flagged with a war
 Environment variable "MY_KEY" is defined but never used
 ```
 
-### Monorepo support — zero config
+### Monorepo support
 The extension automatically finds the nearest `.env` file by walking up the directory tree from your source file. This means you can have multiple `.env` files in a monorepo and the extension will always compare against the correct one.
 
 ```
@@ -52,19 +50,9 @@ apps/
 
 ## How it works
 
-- Scans **all** `.ts` and `.js` files in your workspace for `process.env.KEY` references
+- Scans **all** `.ts` and `.js` files in your workspace for environment variable references
 - Parses the **nearest** `.env` file for each source file
 - Compares the two and produces warnings
-
----
-
-## Supported syntax
-
-```typescript
-process.env.MY_KEY          // dot notation
-process.env["MY_KEY"]       // bracket notation (double quotes)
-process.env['MY_KEY']       // bracket notation (single quotes)
-```
 
 ---
 
@@ -92,4 +80,11 @@ Full documentation is available in the [`docs/`](./docs/index.md) folder:
 
 ## Feedback & contributions
 
-Found a bug or have a feature request? Open an issue on [GitHub](https://github.com/Chrilleweb/vscode-dotenv-diff/issues).
+Issues and pull requests are welcome.  
+→ See [CONTRIBUTING](CONTRIBUTING.md) for details.
+
+## License
+
+Licensed under the [MIT](LICENSE) license.
+
+Created by [chrilleweb](https://github.com/chrilleweb)
