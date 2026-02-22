@@ -8,6 +8,8 @@ This document describes everything `vscode-dotenv-diff` can do, and how it behav
 
 When a `.ts` or `.js` file references `process.env.KEY` and that key is not present in the nearest `.env` file, the extension underlines the reference with a warning.
 
+![Not Defined](./screenshots/not-defined.png)
+
 **Example:**
 
 `apps/frontend/.env`
@@ -33,17 +35,18 @@ Environment variable "SECRET" is not defined in .env
 
 When a key is defined in a `.env` file but never referenced anywhere in the workspace, the key is flagged with a warning directly on that line in the `.env` file.
 
+![Unused](./screenshots/unused.png)
+
 **Example:**
 
 `.env`
 ```
-DB_HOST=localhost      # used in open source files
-LEGACY_TOKEN=abc123    # not used anywhere
+DB_HOST=
 ```
 
 **Warning message:**
 ```
-Environment variable "LEGACY_TOKEN" is defined but never used
+Environment variable "DB_HOST" is defined in .env but never used
 ```
 
 ---
@@ -87,9 +90,7 @@ Only `UPPER_CASE` key names are matched, which is the standard convention for en
 
 ---
 
-## 5. Full workspace scanning
-
-On startup the extension scans all `.ts` and `.js` files in your workspace. This means unused `.env` keys are detected correctly from the moment you open VS Code, without needing to open every file manually.
+## 5. Skipped files
 
 Test files (`.test.ts`, `.spec.ts` etc.) are intentionally skipped.
 
