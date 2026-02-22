@@ -1,4 +1,5 @@
 import * as vscode from "vscode";
+import * as fs from "fs";
 import {
   createDiagnosticCollection,
   refreshAllDiagnostics,
@@ -10,26 +11,42 @@ import {
  * @param context The extension context provided by VS Code on activation
  * @return void
  */
-export function activate(context: vscode.ExtensionContext): void {
+export async function activate(
+  context: vscode.ExtensionContext,
+): Promise<void> {
   const collection = createDiagnosticCollection();
 
-  // Run once on startup for already-open files
-  refreshAllDiagnostics(collection);
+  const workspaceFiles = await vscode.workspace.findFiles(
+    "**/*.{ts,js}",
+    "{**/node_modules/**,**/*.test.ts,**/*.test.js,**/*.spec.ts,**/*.spec.js}",
+  );
 
-  // Re-run when a file is opened or its content changes
+  const workspaceFileContents = new Map<string, string>();
+  for (const file of workspaceFiles) {
+    try {
+      const content = fs.readFileSync(file.fsPath, "utf8");
+      workspaceFileContents.set(file.fsPath, content);
+    } catch {
+      // Skip files that cannot be read
+    }
+  }
+
+  const refresh = () =>
+    refreshAllDiagnostics(collection, workspaceFileContents);
+
+  refresh();
+
   context.subscriptions.push(
-    vscode.workspace.onDidOpenTextDocument(() =>
-      refreshAllDiagnostics(collection),
-    ),
-    vscode.workspace.onDidChangeTextDocument(() =>
-      refreshAllDiagnostics(collection),
-    ),
-    vscode.workspace.onDidCloseTextDocument(() =>
-      refreshAllDiagnostics(collection),
-    ),
-    vscode.workspace.onDidSaveTextDocument(() =>
-      refreshAllDiagnostics(collection),
-    ),
+    vscode.workspace.onDidOpenTextDocument((doc) => {
+      workspaceFileContents.set(doc.fileName, doc.getText());
+      refresh();
+    }),
+    vscode.workspace.onDidChangeTextDocument((e) => {
+      workspaceFileContents.set(e.document.fileName, e.document.getText());
+      refresh();
+    }),
+    vscode.workspace.onDidCloseTextDocument(() => refresh()),
+    vscode.workspace.onDidSaveTextDocument(() => refresh()),
     collection,
   );
 }

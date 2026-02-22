@@ -1,14 +1,20 @@
-# vscode-dotenv-diff 🔍
-
+# [VS Code Dotenv-diff](https://marketplace.visualstudio.com/items?itemName=Chrilleweb.dotenv-diff)
 > Catch missing and unused environment variables before they catch you.
 
-`vscode-dotenv-diff` is a lightweight VS Code extension that warns you when your code references environment variables that aren't defined in your `.env` file — and when your `.env` file has variables that are never used in your code.
+[![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/Chrilleweb.dotenv-diff?label=VS%20Code%20Marketplace&color=blue)](https://marketplace.visualstudio.com/items?itemName=Chrilleweb.dotenv-diff)
+[![Installs](https://img.shields.io/visual-studio-marketplace/i/Chrilleweb.dotenv-diff)](https://marketplace.visualstudio.com/items?itemName=Chrilleweb.dotenv-diff)
+[![Rating](https://img.shields.io/visual-studio-marketplace/r/Chrilleweb.dotenv-diff)](https://marketplace.visualstudio.com/items?itemName=Chrilleweb.dotenv-diff)
+
+`vscode-dotenv-diff` is a lightweight VS Code extension that warns you when your code references environment variables (`process.env`) that aren't defined in your `.env` file — and when your `.env` file has variables that are never used in your code.
 
 ---
 
 ## Features
 
 ### Missing variables in code
+
+![Not Defined](./docs/screenshots/not-defined.png)
+
 If your `.ts` or `.js` file references `process.env.MY_KEY` and `MY_KEY` is not defined in the nearest `.env` file, you'll see a warning underline directly in the editor.
 
 ```
@@ -16,6 +22,9 @@ Environment variable "MY_KEY" is not defined in .env
 ```
 
 ### Unused variables in `.env`
+
+![Unused](./docs/screenshots/unused.png)
+
 If a key in your `.env` file is never referenced in any open source file, the line is flagged with a warning.
 
 ```
@@ -41,9 +50,9 @@ apps/
 
 ## How it works
 
-- Scans all **open** `.ts` and `.js` files for `process.env.KEY` references
+- Scans **all** `.ts` and `.js` files in your workspace for `process.env.KEY` references
 - Parses the **nearest** `.env` file for each source file
-- Compares the two and produces warnings in the **Problems** panel (`Cmd+Shift+M`)
+- Compares the two and produces warnings
 - Re-runs automatically when you open, edit, save, or close a file
 
 ---
@@ -60,7 +69,7 @@ process.env['MY_KEY']       // bracket notation (single quotes)
 
 ## Requirements
 
-- VS Code `1.60.0` or higher
+- VS Code `1.109.0` or higher
 - A `.env` file somewhere in your project tree
 
 ---
@@ -73,7 +82,6 @@ This extension has no configuration. It works out of the box.
 
 ## Known limitations
 
-- Only **open documents** are scanned (not the full workspace)
 - Only `UPPER_CASE` env key names are matched (standard convention)
 - Dynamic keys like `` process.env[`key_${name}`] `` are not supported
 
