@@ -5,7 +5,9 @@
 [![Installs](https://img.shields.io/visual-studio-marketplace/i/Chrilleweb.dotenv-diff)](https://marketplace.visualstudio.com/items?itemName=Chrilleweb.dotenv-diff)
 [![Rating](https://img.shields.io/visual-studio-marketplace/r/Chrilleweb.dotenv-diff)](https://marketplace.visualstudio.com/items?itemName=Chrilleweb.dotenv-diff)
 
-`vscode-dotenv-diff` is a lightweight VS Code extension that warns you when your code references environment variables (`process.env`) that aren't defined in your `.env` file — and when your `.env` file has variables that are never used in your code.
+`vscode-dotenv-diff` is a lightweight VS Code extension that warns you when your `.ts` or `.js` files reference environment variables (`process.env`) that aren't defined in your `.env` file — and when your `.env` file has variables that are never used in your codebase.
+
+> Note: This extension only checks for `process.env` references
 
 ---
 
@@ -25,14 +27,14 @@ Environment variable "MY_KEY" is not defined in .env
 
 ![Unused](./docs/screenshots/unused.png)
 
-If a key in your `.env` file is never referenced in any open source file, the line is flagged with a warning.
+If a key in your `.env` file is never referenced, the line is flagged with a warning.
 
 ```
 Environment variable "MY_KEY" is defined but never used
 ```
 
 ### Monorepo support — zero config
-The extension automatically finds the nearest `.env` file by walking up the directory tree from your source file. No configuration needed.
+The extension automatically finds the nearest `.env` file by walking up the directory tree from your source file. This means you can have multiple `.env` files in a monorepo and the extension will always compare against the correct one.
 
 ```
 apps/
@@ -53,7 +55,6 @@ apps/
 - Scans **all** `.ts` and `.js` files in your workspace for `process.env.KEY` references
 - Parses the **nearest** `.env` file for each source file
 - Compares the two and produces warnings
-- Re-runs automatically when you open, edit, save, or close a file
 
 ---
 
