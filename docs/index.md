@@ -1,6 +1,6 @@
 # vscode-dotenv-diff – Documentation
 
-Welcome to the official documentation for `vscode-dotenv-diff`, a VS Code extension that catches missing and unused environment variables directly in your editor.
+Welcome to the official documentation for `vscode-dotenv-diff`, a VS Code extension that catches missing and unused environment variables (`process.env`) directly in your editor.
 
 ---
 

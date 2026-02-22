@@ -5,7 +5,7 @@
 [![Installs](https://img.shields.io/visual-studio-marketplace/i/Chrilleweb.dotenv-diff)](https://marketplace.visualstudio.com/items?itemName=Chrilleweb.dotenv-diff)
 [![Rating](https://img.shields.io/visual-studio-marketplace/r/Chrilleweb.dotenv-diff)](https://marketplace.visualstudio.com/items?itemName=Chrilleweb.dotenv-diff)
 
-`VS Code Dotenv-diff` is a lightweight VS Code extension that warns you when your code references environment variables (`process.env`) that aren't defined in your `.env` file — and when your `.env` file has variables that are never used in your code.
+`vscode-dotenv-diff` is a lightweight VS Code extension that warns you when your code references environment variables (`process.env`) that aren't defined in your `.env` file — and when your `.env` file has variables that are never used in your code.
 
 ---
 

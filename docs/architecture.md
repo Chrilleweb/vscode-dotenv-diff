@@ -21,7 +21,9 @@ The key architectural split is between `core/` and the rest. Everything inside `
 ## Module responsibilities
 
 ### `extension.ts`
+
 The entry point. Responsible for:
+
 - Creating the single `DiagnosticCollection` instance
 - Registering VS Code event listeners (`onDidOpenTextDocument`, `onDidChangeTextDocument` etc.)
 - Calling `refreshAllDiagnostics()` on each event
@@ -32,7 +34,9 @@ This module contains no business logic — it only wires things together.
 ---
 
 ### `diagnostics.ts`
+
 The orchestrator. Responsible for:
+
 - Clearing and rebuilding all diagnostics on each refresh
 - Running Pass 1 (missing keys in source files)
 - Running Pass 2 (unused keys in `.env` files)
@@ -43,7 +47,9 @@ This is the only module that imports from `vscode` apart from `extension.ts`.
 ---
 
 ### `core/commentDetector.ts`
+
 A pure function module. Responsible for:
+
 - Detecting if a given index in source text is inside a comment
 - Supporting single-line comments (`//`) and multi-line comments (`/* */`)
 - Returning a boolean indicating whether the index is commented out
@@ -53,7 +59,9 @@ No side effects, no VS Code dependency — fully unit testable.
 ---
 
 ### `core/scanner.ts`
+
 A pure function module. Responsible for:
+
 - Matching `process.env.KEY` patterns in raw source text
 - Supporting dot notation and bracket notation
 - Returning an array of `{ key, index }` objects
@@ -63,7 +71,9 @@ No side effects, no VS Code dependency — fully unit testable.
 ---
 
 ### `core/envParser.ts`
+
 A pure function module. Responsible for:
+
 - Reading a `.env` file from disk
 - Ignoring comments and empty lines
 - Returning a `Set<string>` of key names
@@ -73,7 +83,9 @@ No side effects, no VS Code dependency — fully unit testable.
 ---
 
 ### `core/fileWalker.ts`
+
 A pure function module. Responsible for:
+
 - Starting at the directory of a given file
 - Walking up the tree until a `.env` file is found
 - Returning `null` if none is found before the filesystem root
@@ -86,8 +98,4 @@ This is what enables monorepo support with zero configuration.
 
 **Isolate VS Code.** Only `extension.ts` and `diagnostics.ts` import from `vscode`. Everything in `core/` is plain TypeScript that works in any environment — making it easy to test, reuse, and reason about independently.
 
-**Scan only open documents.** Rather than crawling the entire workspace, the extension only looks at what is currently open. This keeps performance predictable regardless of project size.
-
 **No configuration.** The extension works out of the box. Decisions like "find the nearest `.env`" are made automatically so the user never has to think about setup.
-
-**Refresh everything on each event.** Rather than trying to diff what changed, we clear and rebuild all diagnostics on every document event. For the scope of open documents only, this is fast enough and keeps the logic simple and correct.
