@@ -1,4 +1,5 @@
 import * as vscode from "vscode";
+import { isSourceFilePath } from "./core/sourceFileMatcher";
 import { parseEnvKeys } from "./core/envParser";
 import { scanForEnvUsages } from "./core/scanner";
 import { findNearestEnv } from "./core/fileWalker";
@@ -109,32 +110,14 @@ export function refreshAllDiagnostics(
 
 /**
  * Helper function to determine if a document is a TypeScript or JavaScript source file.
+ * isSourceFilePath is used to further filter by file extension and exclude test/spec files.
  * @param doc The TextDocument to check
  * @returns True if the document is a .ts or .js file, false otherwise
  */
 function isSourceFile(doc: vscode.TextDocument): boolean {
   return (
     (doc.languageId === "typescript" || doc.languageId === "javascript") &&
-    !doc.fileName.endsWith(".test.ts") &&
-    !doc.fileName.endsWith(".test.js") &&
-    !doc.fileName.endsWith(".spec.ts") &&
-    !doc.fileName.endsWith(".spec.js")
-  );
-}
-
-/**
- * Helper function to determine if a file path points to a TypeScript or JavaScript source file.
- * Used for workspace scanning where we only have file paths, not TextDocuments.
- * @param filePath The file path to check
- * @returns True if the file path ends with .ts or .js (but not test/spec files), false otherwise
- */
-function isSourceFilePath(filePath: string): boolean {
-  return (
-    (filePath.endsWith(".ts") || filePath.endsWith(".js")) &&
-    !filePath.endsWith(".test.ts") &&
-    !filePath.endsWith(".test.js") &&
-    !filePath.endsWith(".spec.ts") &&
-    !filePath.endsWith(".spec.js")
+    isSourceFilePath(doc.fileName)
   );
 }
 
