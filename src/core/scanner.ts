@@ -24,6 +24,8 @@ export interface EnvUsage {
   key: string;
   /** The character index in the source text where this usage starts */
   index: number;
+  /** The full matched token length (e.g., process.env.KEY) */
+  matchLength: number;
 }
 
 /**
@@ -53,7 +55,7 @@ export function scanForEnvUsages(sourceText: string): EnvUsage[] {
         continue;
       }
 
-      usages.push({ key, index: match.index });
+      usages.push({ key, index: match.index, matchLength: match[0].length });
     }
 
     pattern.lastIndex = 0;

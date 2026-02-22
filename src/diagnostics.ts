@@ -42,10 +42,7 @@ export function refreshAllDiagnostics(
     for (const usage of usages) {
       if (!envKeys.has(usage.key)) {
         const pos = doc.positionAt(usage.index);
-        // Underline the full process.env.KEY token
-        const endPos = doc.positionAt(
-          usage.index + "process.env.".length + usage.key.length,
-        );
+        const endPos = doc.positionAt(usage.index + usage.matchLength);
         const range = new vscode.Range(pos, endPos);
 
         const diagnostic = new vscode.Diagnostic(
