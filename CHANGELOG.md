@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - "You miss 100 percent of the chances you don't take. — Wayne Gretzky" — Michael Scott
 
+## [0.4.0](https://github.com/Chrilleweb/vscode-dotenv-diff/compare/v0.3.0...v0.4.0) (2026-02-22)
+
+### ✨ Features
+
+* sveltekit env support ([#9](https://github.com/Chrilleweb/vscode-dotenv-diff/issues/9)) ([d40f505](https://github.com/Chrilleweb/vscode-dotenv-diff/commit/d40f505ff0c2e279507c8011169a1c9787075633))
+
 ## [0.3.0](https://github.com/Chrilleweb/vscode-dotenv-diff/compare/v0.2.1...v0.3.0) (2026-02-22)
 
 ### ✨ Features
