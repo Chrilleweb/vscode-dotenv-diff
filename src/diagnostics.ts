@@ -18,7 +18,7 @@ export function createDiagnosticCollection(): vscode.DiagnosticCollection {
  * Re-runs all diagnostics across all currently open text documents.
  * Called whenever a document is opened, saved, or closed.
  * @param collection The DiagnosticCollection to update with new diagnostics
- * @param workspaceFiles A map of file paths to their contents for all files in the workspace (used for cross-file analysis)
+ * @param workspaceFiles A map of all file paths to their content in the current workspace
  * @return void
  */
 export function refreshAllDiagnostics(
@@ -29,7 +29,21 @@ export function refreshAllDiagnostics(
 
   const openDocs = vscode.workspace.textDocuments;
 
-  // --- Pass 1: Warn about missing keys in .ts/.js files ---
+  checkMissingKeys(collection, openDocs);
+  checkUnusedKeys(collection, openDocs, workspaceFiles);
+}
+
+/**
+ * Pass 1 — Warns about process.env.KEY references in source files
+ * that are not defined in the nearest .env file.
+ * @param collection The DiagnosticCollection to update with new diagnostics
+ * @param openDocs The currently open text documents in the editor
+ * @return void 
+ */
+function checkMissingKeys(
+  collection: vscode.DiagnosticCollection,
+  openDocs: readonly vscode.TextDocument[],
+): void {
   for (const doc of openDocs) {
     if (!isSourceFile(doc)) {
       continue;
@@ -58,9 +72,21 @@ export function refreshAllDiagnostics(
 
     collection.set(doc.uri, diagnostics);
   }
+}
 
-  // --- Pass 2: Warn about unused keys in open .env files ---
-  // Collect all keys used across all open source files
+/**
+ * Pass 2 — Warns about keys defined in .env files
+ * that are never used anywhere in the workspace.
+ * @param collection The DiagnosticCollection to update with new diagnostics
+ * @param openDocs The currently open text documents in the editor
+ * @param workspaceFiles A map of all file paths to their content in the current workspace
+ * @return void
+ */
+function checkUnusedKeys(
+  collection: vscode.DiagnosticCollection,
+  openDocs: readonly vscode.TextDocument[],
+  workspaceFiles: Map<string, string>,
+): void {
   const allUsedKeys = new Set<string>();
 
   for (const [filePath, content] of workspaceFiles) {
@@ -70,7 +96,6 @@ export function refreshAllDiagnostics(
     scanForEnvUsages(content).forEach((u) => allUsedKeys.add(u.key));
   }
 
-  // Check each open .env file
   for (const doc of openDocs) {
     if (!isEnvFile(doc)) {
       continue;
