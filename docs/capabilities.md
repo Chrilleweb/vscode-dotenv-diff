@@ -8,8 +8,6 @@ This document describes everything `vscode-dotenv-diff` can do, and how it behav
 
 When a `.ts` or `.js` file references `process.env.KEY` and that key is not present in the nearest `.env` file, the extension underlines the reference with a warning.
 
-> Note: This only applies for `process.env` references, not for other usages of environment variables (e.g.`import.meta.env`).
-
 **Example:**
 
 `apps/frontend/.env`
@@ -34,8 +32,6 @@ Environment variable "SECRET" is not defined in .env
 ## 2. Unused environment variables
 
 When a key is defined in a `.env` file but never referenced anywhere in the workspace, the key is flagged with a warning directly on that line in the `.env` file.
-
-> Note: This only applies for `process.env` references, not for other usages of environment variables (e.g.`import.meta.env`).
 
 **Example:**
 
@@ -82,6 +78,9 @@ The extension recognises the following patterns:
 process.env.MY_KEY          // dot notation
 process.env["MY_KEY"]       // bracket notation, double quotes
 process.env['MY_KEY']       // bracket notation, single quotes
+import.meta.env.MY_KEY       // dot notation
+import.meta.env["MY_KEY"]    // bracket notation, double quotes
+import.meta.env['MY_KEY']    // bracket notation, single quotes
 ```
 
 Only `UPPER_CASE` key names are matched, which is the standard convention for environment variables.
