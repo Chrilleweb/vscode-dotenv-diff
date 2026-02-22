@@ -47,7 +47,7 @@ apps/
 
 - Scans all **open** `.ts` and `.js` files for `process.env.KEY` references
 - Parses the **nearest** `.env` file for each source file
-- Compares the two and produces warnings in the **Problems** panel (`Cmd+Shift+M`)
+- Compares the two and produces warnings
 - Re-runs automatically when you open, edit, save, or close a file
 
 ---
@@ -64,7 +64,7 @@ process.env['MY_KEY']       // bracket notation (single quotes)
 
 ## Requirements
 
-- VS Code `1.60.0` or higher
+- VS Code `1.109.0` or higher
 - A `.env` file somewhere in your project tree
 
 ---
