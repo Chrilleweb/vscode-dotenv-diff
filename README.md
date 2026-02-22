@@ -81,13 +81,6 @@ This extension has no configuration. It works out of the box.
 
 ---
 
-## Known limitations
-
-- Only `UPPER_CASE` env key names are matched (standard convention)
-- Dynamic keys like `` process.env[`key_${name}`] `` are not supported
-
----
-
 ## Documentation
 
 Full documentation is available in the [`docs/`](./docs/index.md) folder:
