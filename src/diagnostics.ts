@@ -17,10 +17,12 @@ export function createDiagnosticCollection(): vscode.DiagnosticCollection {
  * Re-runs all diagnostics across all currently open text documents.
  * Called whenever a document is opened, saved, or closed.
  * @param collection The DiagnosticCollection to update with new diagnostics
+ * @param workspaceFiles A map of file paths to their contents for all files in the workspace (used for cross-file analysis)
  * @return void
  */
 export function refreshAllDiagnostics(
   collection: vscode.DiagnosticCollection,
+  workspaceFiles: Map<string, string>,
 ): void {
   collection.clear();
 
@@ -35,8 +37,7 @@ export function refreshAllDiagnostics(
     const envPath = findNearestEnv(doc.fileName);
     const envKeys = envPath ? parseEnvKeys(envPath) : new Set<string>();
     const diagnostics: vscode.Diagnostic[] = [];
-    const text = doc.getText();
-    const usages = scanForEnvUsages(text);
+    const usages = scanForEnvUsages(doc.getText());
 
     for (const usage of usages) {
       if (!envKeys.has(usage.key)) {
@@ -64,12 +65,11 @@ export function refreshAllDiagnostics(
   // Collect all keys used across all open source files
   const allUsedKeys = new Set<string>();
 
-  for (const doc of openDocs) {
-    if (!isSourceFile(doc)) {
+  for (const [filePath, content] of workspaceFiles) {
+    if (!isSourceFilePath(filePath)) {
       continue;
     }
-    const usages = scanForEnvUsages(doc.getText());
-    usages.forEach((u) => allUsedKeys.add(u.key));
+    scanForEnvUsages(content).forEach((u) => allUsedKeys.add(u.key));
   }
 
   // Check each open .env file
@@ -98,7 +98,7 @@ export function refreshAllDiagnostics(
         const range = new vscode.Range(lineIndex, 0, lineIndex, key.length);
         const diagnostic = new vscode.Diagnostic(
           range,
-          `Environment variable "${key}" is defined but never used in ${ENV_FILE_NAME}`,
+          `Environment variable "${key}" is defined in ${ENV_FILE_NAME} but never used`,
           vscode.DiagnosticSeverity.Warning,
         );
         diagnostic.source = "dotenv-diff";
@@ -122,6 +122,22 @@ function isSourceFile(doc: vscode.TextDocument): boolean {
     !doc.fileName.endsWith(".test.js") &&
     !doc.fileName.endsWith(".spec.ts") &&
     !doc.fileName.endsWith(".spec.js")
+  );
+}
+
+/**
+ * Helper function to determine if a file path points to a TypeScript or JavaScript source file.
+ * Used for workspace scanning where we only have file paths, not TextDocuments.
+ * @param filePath The file path to check
+ * @returns True if the file path ends with .ts or .js (but not test/spec files), false otherwise
+ */
+function isSourceFilePath(filePath: string): boolean {
+  return (
+    (filePath.endsWith(".ts") || filePath.endsWith(".js")) &&
+    !filePath.endsWith(".test.ts") &&
+    !filePath.endsWith(".test.js") &&
+    !filePath.endsWith(".spec.ts") &&
+    !filePath.endsWith(".spec.js")
   );
 }
 
