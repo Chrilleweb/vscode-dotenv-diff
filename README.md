@@ -28,7 +28,7 @@ Environment variable "MY_KEY" is not defined in .env
 If a key in your `.env` file is never referenced, the line is flagged with a warning.
 
 ```
-Environment variable "MY_KEY" is defined but never used
+Environment variable "MY_KEY" is defined in .env but never used
 ```
 
 ### Monorepo support
@@ -45,14 +45,6 @@ apps/
     └── src/
         └── server.ts
 ```
-
----
-
-## How it works
-
-- Scans **all** `.ts` and `.js` files in your workspace for environment variable references
-- Parses the **nearest** `.env` file for each source file
-- Compares the two and produces warnings
 
 ---
 
