@@ -9,7 +9,7 @@ import {
 /**
  * Represents a single usage of an environment variable in the source code.
  */
-export interface EnvUsage {
+interface EnvUsage {
   /** The name of the environment variable being accessed (e.g., "MY_KEY") */
   key: string;
   /** The character index in the source text where this usage starts */

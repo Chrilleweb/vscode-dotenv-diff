@@ -1,13 +1,4 @@
 /**
- * Detects whether a position in source code is inside a comment.
- * Handles:
- *   // single-line comments
- *   /* block comments
- *   /** JSDoc comments
- *    * continuation lines in block comments
- */
-
-/**
  * Returns true if the given match index is inside any kind of comment.
  * @param sourceText The full source text
  * @param matchIndex The character index to check
