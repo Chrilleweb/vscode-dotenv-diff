@@ -78,13 +78,25 @@ Each source file always resolves to its nearest `.env` — independently of othe
 The extension recognises the following patterns:
 
 ```typescript
-process.env.MY_KEY          // dot notation
-process.env["MY_KEY"]       // bracket notation, double quotes
-process.env['MY_KEY']       // bracket notation, single quotes
-import.meta.env.MY_KEY       // dot notation
-import.meta.env["MY_KEY"]    // bracket notation, double quotes
-import.meta.env['MY_KEY']    // bracket notation, single quotes
-env.PUBLIC_API_URL; // SvelteKit $env usage
+// Node.js
+process.env.MY_KEY
+process.env["MY_KEY"]
+process.env['MY_KEY']
+
+// Vite / import.meta
+import.meta.env.MY_KEY
+import.meta.env["MY_KEY"]
+import.meta.env['MY_KEY']
+
+// SvelteKit – dynamic (env object)
+import { env } from '$env/dynamic/private';
+import { env } from '$env/dynamic/public';
+env.MY_KEY
+
+// SvelteKit – static (named imports)
+import { MY_KEY } from '$env/static/private';
+import { MY_KEY } from '$env/static/public';
+MY_KEY
 ```
 
 Only `UPPER_CASE` key names are matched, which is the standard convention for environment variables.
@@ -103,3 +115,11 @@ The extension intentionally skips:
 ## Known limitations
 
 - `.env.local`, `.env.production` etc. are not resolved — only `.env`
+- Template literal expressions are scanned, but dynamic key access is not supported:
+```typescript
+  process.env[`MY_${suffix}`] // not detected
+```
+- Destructured imports are not supported:
+```typescript
+  const { MY_KEY } = process.env // not detected
+```
