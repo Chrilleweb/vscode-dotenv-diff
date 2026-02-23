@@ -2,6 +2,14 @@ import * as assert from "assert";
 import { isInComment } from "../../core/commentDetector";
 
 suite("commentDetector", () => {
+  test("detects inline single-line comment after code", () => {
+    const text = "const x = 1; // process.env.KEY";
+    assert.strictEqual(
+      isInComment(text, text.indexOf("process.env.KEY")),
+      true,
+    );
+  });
+
   test("detects single-line comment", () => {
     assert.strictEqual(isInComment("// process.env.KEY", 3), true);
   });
@@ -25,7 +33,15 @@ suite("commentDetector", () => {
   test("does not flag usage after a closed block comment", () => {
     assert.strictEqual(
       isInComment("/* comment */ const x = process.env.KEY;", 24),
-      false
+      false,
+    );
+  });
+
+  test("detects content inside template literals", () => {
+    const text = "const s = `process.env.KEY`;";
+    assert.strictEqual(
+      isInComment(text, text.indexOf("process.env.KEY")),
+      true,
     );
   });
 });

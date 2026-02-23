@@ -1,4 +1,6 @@
-// test/fixtures/sveltekit.ts
+/**
+ * Fixtures for testing SvelteKit env usage patterns.
+ */
 export const dynamicPrivateImport = `
   import { env } from '$env/dynamic/private';
     const secret = env.SECRET_KEY;
