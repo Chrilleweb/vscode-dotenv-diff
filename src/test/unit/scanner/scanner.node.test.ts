@@ -2,6 +2,8 @@ import * as assert from "assert";
 import { scanForEnvUsages } from "../../../core/scanner";
 import {
   multipleProcessEnvDotNotation,
+  processEnvDestructuring,
+  processEnvDestructuringWithAliasAndDefault,
   processEnvBracketDoubleQuotes,
   processEnvBracketSingleQuotes,
   processEnvDotNotation,
@@ -39,5 +41,20 @@ suite("scanner (node)", () => {
   test("does not match lowercase process.env keys", () => {
     const usages = scanForEnvUsages(processEnvLowercaseKey);
     assert.strictEqual(usages.length, 0);
+  });
+
+  test("finds process.env destructuring usage", () => {
+    const usages = scanForEnvUsages(processEnvDestructuring);
+    assert.strictEqual(usages.length, 1);
+    assert.strictEqual(usages[0].key, "PUBLIC_API_URL");
+  });
+
+  test("finds process.env destructuring with alias and default", () => {
+    const usages = scanForEnvUsages(processEnvDestructuringWithAliasAndDefault);
+    assert.strictEqual(usages.length, 3);
+    assert.deepStrictEqual(
+      usages.map((usage) => usage.key),
+      ["SECRET_KEY", "API_TOKEN", "PUBLIC_URL"],
+    );
   });
 });

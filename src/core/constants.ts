@@ -38,6 +38,16 @@ export const PROCESS_ENV_PATTERN =
   /process\.env\.([A-Z_][A-Z0-9_]*)|process\.env\[['"]([A-Z_][A-Z0-9_]*)['"]]/g;
 
 /**
+ * Matches object destructuring from process.env.
+ * Captures the full object pattern between braces for further parsing.
+ *
+ * Example:
+ *   const { MY_KEY, OTHER_KEY: alias, THIRD_KEY = "fallback" } = process.env
+ */
+export const PROCESS_ENV_DESTRUCTURING_PATTERN =
+  /\{([^}]*)\}\s*=\s*process\.env\b/g;
+
+/**
  * Matches import.meta.env.KEY references in source code.
  * Supports both dot notation and bracket notation.
  *
