@@ -93,12 +93,13 @@ Only `UPPER_CASE` key names are matched, which is the standard convention for en
 
 ## 5. Skipped files
 
-Test files (`.test.ts`, `.spec.ts` etc.) are intentionally skipped.
+The extension intentionally skips:
+
+- `node_modules/**`
+- Test files (`.test.ts`, `.spec.ts` etc.)
 
 ---
 
 ## Known limitations
 
-- Dynamic key access like `` process.env[`key_${name}`] `` is not supported
-- Only `UPPER_CASE` keys are matched
 - `.env.local`, `.env.production` etc. are not resolved — only `.env`

@@ -15,10 +15,10 @@
 
 ![Not Defined](./docs/screenshots/not-defined.png)
 
-If your `.ts` or `.js` file references `process.env.MY_KEY` and `MY_KEY` is not defined in the nearest `.env` file, you'll see a warning underline directly in the editor.
+If your `.ts` or `.js` file references `SECRET` and it's not defined in the nearest `.env` file, you'll see a warning underline directly in the editor.
 
 ```
-Environment variable "MY_KEY" is not defined in .env
+Environment variable "SECRET" is not defined in .env
 ```
 
 ### Unused variables in `.env`
@@ -28,7 +28,7 @@ Environment variable "MY_KEY" is not defined in .env
 If a key in your `.env` file is never referenced, the line is flagged with a warning.
 
 ```
-Environment variable "MY_KEY" is defined in .env but never used
+Environment variable "DB_HOST" is defined in .env but never used
 ```
 
 ### Monorepo support
