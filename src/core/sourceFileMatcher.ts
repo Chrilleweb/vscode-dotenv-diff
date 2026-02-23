@@ -1,3 +1,4 @@
+import { SOURCE_FILE_EXTENSIONS } from "./constants";
 /**
  * Helper function to determine if a file path points to a TypeScript or JavaScript source file.
  * Only files with .ts, .js, .mjs, .cjs, .mts, or .cts extensions are considered source files.
@@ -7,7 +8,7 @@
  */
 export function isSourceFilePath(filePath: string): boolean {
   return (
-    /\.(ts|js|mjs|cjs|mts|cts)$/.test(filePath) &&
-    !/(\.test\.|\.spec\.)(ts|js|mjs|cjs|mts|cts)$/.test(filePath)
+    new RegExp(`\\.(${SOURCE_FILE_EXTENSIONS})$`).test(filePath) &&
+    !new RegExp(`\\.(test|spec)\\.(${SOURCE_FILE_EXTENSIONS})$`).test(filePath)
   );
 }

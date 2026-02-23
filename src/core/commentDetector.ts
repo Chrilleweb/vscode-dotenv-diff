@@ -1,6 +1,7 @@
 /**
  * Returns true if the given match index is inside a comment or string-like region.
  * This avoids false positives from commented-out code and fixture/template content.
+ * Note: template strings are intentionally not excluded since they can contain real code and we want to catch usages there as well.
  * @param sourceText The full source text
  * @param matchIndex The character index to check
  */
@@ -107,7 +108,6 @@ export function isInComment(sourceText: string, matchIndex: number): boolean {
     inLineComment ||
     inBlockComment ||
     inSingleQuote ||
-    inDoubleQuote ||
-    inTemplateString
+    inDoubleQuote
   );
 }

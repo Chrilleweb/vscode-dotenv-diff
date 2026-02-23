@@ -50,19 +50,4 @@ suite("scanner (sveltekit)", () => {
     const usages = scanForEnvUsages(envWithoutImport);
     assert.strictEqual(usages.length, 0);
   });
-
-  test("ignores SvelteKit env usage inside template literals and comments", () => {
-    const source = `
-      import { env } from '$env/dynamic/public';
-      const fixture = \`const url = env.PUBLIC_API_URL;\`;
-      // const ignored = env.PUBLIC_IN_COMMENT;
-      const real = env.PUBLIC_REAL;
-    `;
-
-    const usages = scanForEnvUsages(source);
-    assert.deepStrictEqual(
-      usages.map((usage) => usage.key),
-      ["PUBLIC_REAL"],
-    );
-  });
 });

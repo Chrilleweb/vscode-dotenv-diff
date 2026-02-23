@@ -37,11 +37,11 @@ suite("commentDetector", () => {
     );
   });
 
-  test("detects content inside template literals", () => {
+  test("does not detect content inside template literals", () => {
     const text = "const s = `process.env.KEY`;";
     assert.strictEqual(
       isInComment(text, text.indexOf("process.env.KEY")),
-      true,
+      false,
     );
   });
 });

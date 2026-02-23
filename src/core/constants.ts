@@ -5,17 +5,25 @@
 export const ENV_FILE_NAME = ".env";
 
 /**
+ * Supported source file extensions.
+ * This is the single source of truth – SOURCE_FILE_GLOB and EXCLUDE_FILE_GLOB
+ * are derived from this list, as is isSourceFilePath() in sourceFileMatcher.ts.
+ */
+export const SOURCE_FILE_EXTENSIONS = "ts|js|mjs|cjs|mts|cts|svelte";
+
+/**
  * Glob pattern for finding source files in the workspace.
  * Used by vscode.workspace.findFiles() on startup.
+ * Derived from SOURCE_FILE_EXTENSIONS.
  */
-export const SOURCE_FILE_GLOB = "**/*.{ts,js,mjs,cjs,mts,cts}";
+export const SOURCE_FILE_GLOB = `**/*.{${SOURCE_FILE_EXTENSIONS.replace(/\|/g, ",")}}`;
 
 /**
  * Glob pattern for excluding files from workspace scanning.
  * Excludes node_modules and test/spec files.
+ * Derived from SOURCE_FILE_EXTENSIONS.
  */
-export const EXCLUDE_FILE_GLOB =
-  "{**/node_modules/**,**/*.test.ts,**/*.test.js,**/*.test.mjs,**/*.test.cjs,**/*.test.mts,**/*.test.cts,**/*.spec.ts,**/*.spec.js,**/*.spec.mjs,**/*.spec.cjs,**/*.spec.mts,**/*.spec.cts}";
+export const EXCLUDE_FILE_GLOB = `{**/node_modules/**,**/*.test.+(${SOURCE_FILE_EXTENSIONS}),**/*.spec.+(${SOURCE_FILE_EXTENSIONS})}`;
 
 /**
  * Matches process.env.KEY references in source code.
