@@ -19,7 +19,7 @@ interface EnvUsage {
 }
 
 /**
- * Scans the given source code text for all occurrences of process.env.KEY
+ * Scans the given source code text for all occurrences of environment variable usages.
  * This will also ignore comments (both single-line and block comments) to avoid false positives.
  * @param sourceText The full text of the source code to scan
  * @return An array of EnvUsage objects representing each environment variable usage found
