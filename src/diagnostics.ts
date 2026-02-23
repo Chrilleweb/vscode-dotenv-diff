@@ -45,7 +45,7 @@ function checkMissingKeys(
   openDocs: readonly vscode.TextDocument[],
 ): void {
   for (const doc of openDocs) {
-    if (!isSourceFile(doc)) {
+    if (!isSourceFilePath(doc.fileName)) {
       continue;
     }
 
@@ -131,19 +131,6 @@ function checkUnusedKeys(
 
     collection.set(doc.uri, diagnostics);
   }
-}
-
-/**
- * Helper function to determine if a document is a TypeScript or JavaScript source file.
- * isSourceFilePath is used to further filter by file extension and exclude test/spec files.
- * @param doc The TextDocument to check
- * @returns True if the document is a .ts or .js file, false otherwise
- */
-function isSourceFile(doc: vscode.TextDocument): boolean {
-  return (
-    (doc.languageId === "typescript" || doc.languageId === "javascript") &&
-    isSourceFilePath(doc.fileName)
-  );
 }
 
 /**

@@ -1,28 +1,113 @@
 /**
- * Returns true if the given match index is inside any kind of comment.
+ * Returns true if the given match index is inside a comment or string-like region.
+ * This avoids false positives from commented-out code and fixture/template content.
+ * Note: template strings are intentionally not excluded since they can contain real code and we want to catch usages there as well.
  * @param sourceText The full source text
  * @param matchIndex The character index to check
  */
 export function isInComment(sourceText: string, matchIndex: number): boolean {
-  // Check single-line comment: find start of current line
-  const lineStart = sourceText.lastIndexOf("\n", matchIndex) + 1;
-  const lineContent = sourceText.slice(lineStart, matchIndex).trimStart();
+  let inLineComment = false;
+  let inBlockComment = false;
+  let inSingleQuote = false;
+  let inDoubleQuote = false;
+  let inTemplateString = false;
+  let escaped = false;
 
-  if (
-    lineContent.startsWith("//") || // single-line comment
-    lineContent.startsWith("*") || // continuation line in block comment
-    lineContent.startsWith("#") // shell-style comment
-  ) {
-    return true;
+  for (let i = 0; i < matchIndex; i++) {
+    const ch = sourceText[i];
+    const next = sourceText[i + 1];
+
+    if (inLineComment) {
+      if (ch === "\n") {
+        inLineComment = false;
+      }
+      continue;
+    }
+
+    if (inBlockComment) {
+      if (ch === "*" && next === "/") {
+        inBlockComment = false;
+        i++;
+      }
+      continue;
+    }
+
+    if (inSingleQuote) {
+      if (escaped) {
+        escaped = false;
+        continue;
+      }
+      if (ch === "\\") {
+        escaped = true;
+        continue;
+      }
+      if (ch === "'") {
+        inSingleQuote = false;
+      }
+      continue;
+    }
+
+    if (inDoubleQuote) {
+      if (escaped) {
+        escaped = false;
+        continue;
+      }
+      if (ch === "\\") {
+        escaped = true;
+        continue;
+      }
+      if (ch === '"') {
+        inDoubleQuote = false;
+      }
+      continue;
+    }
+
+    if (inTemplateString) {
+      if (escaped) {
+        escaped = false;
+        continue;
+      }
+      if (ch === "\\") {
+        escaped = true;
+        continue;
+      }
+      if (ch === "`") {
+        inTemplateString = false;
+      }
+      continue;
+    }
+
+    if (ch === "/" && next === "/") {
+      inLineComment = true;
+      i++;
+      continue;
+    }
+
+    if (ch === "/" && next === "*") {
+      inBlockComment = true;
+      i++;
+      continue;
+    }
+
+    if (ch === "'") {
+      inSingleQuote = true;
+      continue;
+    }
+
+    if (ch === '"') {
+      inDoubleQuote = true;
+      continue;
+    }
+
+    if (ch === "`") {
+      inTemplateString = true;
+    }
   }
 
-  // Check block comment: /* ... */
-  const textUpToMatch = sourceText.slice(0, matchIndex);
-  const lastBlockOpen = textUpToMatch.lastIndexOf("/*");
-  const lastBlockClose = textUpToMatch.lastIndexOf("*/");
-  if (lastBlockOpen > lastBlockClose) {
-    return true;
-  }
-
-  return false;
+  return (
+    inLineComment ||
+    inBlockComment ||
+    inSingleQuote ||
+    inDoubleQuote
+  );
 }

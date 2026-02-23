@@ -1,5 +1,5 @@
 import * as assert from "assert";
-import { isSourceFilePath } from "../core/sourceFileMatcher";
+import { isSourceFilePath } from "../../core/sourceFileMatcher";
 
 suite("sourceFileMatcher", () => {
   test("matches supported source file extensions", () => {
@@ -9,6 +9,7 @@ suite("sourceFileMatcher", () => {
     assert.strictEqual(isSourceFilePath("src/app.cjs"), true);
     assert.strictEqual(isSourceFilePath("src/app.mts"), true);
     assert.strictEqual(isSourceFilePath("src/app.cts"), true);
+    assert.strictEqual(isSourceFilePath("src/app.svelte"), true);
   });
 
   test("does not match non-source extensions", () => {
@@ -26,5 +27,6 @@ suite("sourceFileMatcher", () => {
   test("excludes .spec.ts and .spec.js files", () => {
     assert.strictEqual(isSourceFilePath("src/app.spec.ts"), false);
     assert.strictEqual(isSourceFilePath("src/app.spec.js"), false);
+    assert.strictEqual(isSourceFilePath("src/app.spec.svelte"), false);
   });
 });

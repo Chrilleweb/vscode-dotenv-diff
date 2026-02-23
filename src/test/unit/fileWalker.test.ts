@@ -2,7 +2,7 @@ import * as assert from "assert";
 import * as fs from "fs";
 import * as os from "os";
 import * as path from "path";
-import { findNearestEnv } from "../core/fileWalker";
+import { findNearestEnv } from "../../core/fileWalker";
 
 suite("fileWalker", () => {
   let tmpDir: string;
