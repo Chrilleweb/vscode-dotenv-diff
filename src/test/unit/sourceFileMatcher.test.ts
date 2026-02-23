@@ -1,5 +1,5 @@
 import * as assert from "assert";
-import { isSourceFilePath } from "../core/sourceFileMatcher";
+import { isSourceFilePath } from "../../core/sourceFileMatcher";
 
 suite("sourceFileMatcher", () => {
   test("matches supported source file extensions", () => {

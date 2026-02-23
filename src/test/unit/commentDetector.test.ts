@@ -1,5 +1,5 @@
 import * as assert from "assert";
-import { isInComment } from "../core/commentDetector";
+import { isInComment } from "../../core/commentDetector";
 
 suite("commentDetector", () => {
   test("detects single-line comment", () => {
