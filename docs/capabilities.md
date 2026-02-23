@@ -6,7 +6,7 @@ This document describes everything `vscode-dotenv-diff` can do, and how it behav
 
 ## 1. Missing environment variables
 
-When a `.ts` or `.js` file references an environment variable and that key is not present in the nearest `.env` file, the extension underlines the reference with a warning.
+When a source file references an environment variable and that key is not present in the nearest `.env` file, the extension underlines the reference with a warning.
 
 ![Not Defined](./screenshots/not-defined.png)
 
@@ -78,10 +78,14 @@ Each source file always resolves to its nearest `.env` — independently of othe
 The extension recognises the following patterns:
 
 ```typescript
-// Node.js
+// Node.js – dot and bracket notation
 process.env.MY_KEY
 process.env["MY_KEY"]
 process.env['MY_KEY']
+
+// Node.js – destructuring
+const { MY_KEY } = process.env
+const { MY_KEY: alias, OTHER_KEY = "fallback" } = process.env
 
 // Vite / import.meta
 import.meta.env.MY_KEY
@@ -96,10 +100,13 @@ env.MY_KEY
 // SvelteKit – static (named imports)
 import { MY_KEY } from '$env/static/private';
 import { MY_KEY } from '$env/static/public';
+import { MY_KEY as alias } from '$env/static/private';
 MY_KEY
 ```
 
 Only `UPPER_CASE` key names are matched, which is the standard convention for environment variables.
+
+Scanned file types: .ts, .js, .mjs, .cjs, .mts, .cts, .svelte
 
 ---
 
@@ -118,8 +125,4 @@ The extension intentionally skips:
 - Template literal expressions are scanned, but dynamic key access is not supported:
 ```typescript
   process.env[`MY_${suffix}`] // not detected
-```
-- Destructured imports are not supported:
-```typescript
-  const { MY_KEY } = process.env // not detected
 ```
