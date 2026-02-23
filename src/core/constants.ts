@@ -31,12 +31,15 @@ export const PROCESS_ENV_PATTERN =
 
 /**
  * Matches import.meta.env.KEY references in source code.
- * Used in Vite-based projects (e.g. Vue, Svelte, Astro).
+ * Supports both dot notation and bracket notation.
  *
- * Example:
+ * Examples:
  *   import.meta.env.VITE_API_URL
+ *   import.meta.env["VITE_API_URL"]
+ *   import.meta.env['VITE_API_URL']
  */
-export const IMPORT_META_ENV_PATTERN = /import\.meta\.env\.([A-Z_][A-Z0-9_]*)/g;
+export const IMPORT_META_ENV_PATTERN =
+  /import\.meta\.env\.([A-Z_][A-Z0-9_]*)|import\.meta\.env\[['"]([A-Z_][A-Z0-9_]*)['"]]/g;
 
 /**
  * Matches env.KEY references in source code.
