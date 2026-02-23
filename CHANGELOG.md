@@ -9,6 +9,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - "You miss 100 percent of the chances you don't take. — Wayne Gretzky" — Michael Scott
 
+## [0.5.0](https://github.com/Chrilleweb/vscode-dotenv-diff/compare/v0.4.0...v0.5.0) (2026-02-23)
+
+### ✨ Features
+
+* support destructuring env ([#15](https://github.com/Chrilleweb/vscode-dotenv-diff/issues/15)) ([645413d](https://github.com/Chrilleweb/vscode-dotenv-diff/commit/645413dd88e1ddc4e280be6e59a08ade6aa59ebc))
+
+### 🐛 Bug Fixes
+
+* import meta env bracket notation ([#13](https://github.com/Chrilleweb/vscode-dotenv-diff/issues/13)) ([041d564](https://github.com/Chrilleweb/vscode-dotenv-diff/commit/041d5648aee970c8471b3b0189f95560493f1550))
+
+### 📝 Documentation
+
+* updated capabilities ([#14](https://github.com/Chrilleweb/vscode-dotenv-diff/issues/14)) ([58bbccc](https://github.com/Chrilleweb/vscode-dotenv-diff/commit/58bbccc4e1db48f4678c701fd097ef3bf1dc6a8b))
+
 ## [0.4.0](https://github.com/Chrilleweb/vscode-dotenv-diff/compare/v0.3.0...v0.4.0) (2026-02-22)
 
 ### ✨ Features
