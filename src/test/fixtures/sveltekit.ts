@@ -21,6 +21,15 @@ export const staticPublicImport = `
   const url = PUBLIC_API_URL;
 `;
 
+export const staticImportWithoutUsage = `
+  import { SECRET } from '$env/static/private';
+`;
+
+export const staticAliasedImport = `
+  import { SECRET_KEY as SECRET } from '$env/static/private';
+  const key = SECRET;
+`;
+
 export const envWithoutImport = `
   const env = {};
   const url = env.PUBLIC_API_URL;

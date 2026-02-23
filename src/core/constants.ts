@@ -59,3 +59,14 @@ export const SVELTEKIT_ENV_PATTERN = /(?<![.\w])env\.([A-Z_][A-Z0-9_]*)/g;
  *   import { env } from '$env/dynamic/public'
  */
 export const SVELTEKIT_ENV_IMPORT_PATTERN = /from\s+['"](\$env\/)/;
+
+/**
+ * Matches SvelteKit static env named imports.
+ * Used to map imported identifiers to actual env keys.
+ *
+ * Examples:
+ *   import { SECRET_KEY } from '$env/static/private'
+ *   import { PUBLIC_API_URL as API_URL } from "$env/static/public"
+ */
+export const SVELTEKIT_STATIC_ENV_IMPORT_PATTERN =
+  /import\s*\{([^}]*)\}\s*from\s*['"]\$env\/static\/(?:private|public)['"]/g;
