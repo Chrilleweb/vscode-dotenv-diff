@@ -1,11 +1,12 @@
 # [VS Code Dotenv-diff](https://marketplace.visualstudio.com/items?itemName=Chrilleweb.dotenv-diff)
+
 > Catch missing and unused environment variables before they catch you.
 
 [![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/Chrilleweb.dotenv-diff?label=VS%20Code%20Marketplace&color=blue)](https://marketplace.visualstudio.com/items?itemName=Chrilleweb.dotenv-diff)
 [![Installs](https://img.shields.io/visual-studio-marketplace/i/Chrilleweb.dotenv-diff)](https://marketplace.visualstudio.com/items?itemName=Chrilleweb.dotenv-diff)
 [![Rating](https://img.shields.io/visual-studio-marketplace/r/Chrilleweb.dotenv-diff)](https://marketplace.visualstudio.com/items?itemName=Chrilleweb.dotenv-diff)
 
-`vscode-dotenv-diff` is a lightweight VS Code extension that warns you when your `.ts` or `.js` files reference environment variables that aren't defined in your `.env` file — and when your `.env` file has variables that are never used in your codebase.
+`vscode-dotenv-diff` is a lightweight VS Code extension that warns you when your `.ts` or `.js` files reference environment variables that aren't defined in your `.env` file — and when your `.env`/`.env.example` files have variables that are never used in your codebase.
 
 ---
 
@@ -31,7 +32,25 @@ If a key in your `.env` file is never referenced, the line is flagged with a war
 Environment variable "DB_HOST" is defined in .env but never used
 ```
 
+### Missing variables from `.env.example`
+
+![Unused in .env.example](./docs/screenshots/unused-example.png)
+
+![Unused in .env from example](./docs/screenshots/unused-example-env.png)
+
+Keys in `.env.example` are also checked against the nearest `.env`.
+If a key from `.env.example` does not exist in `.env`, it is flagged with a warning.
+
+```
+Environment variable "API_KEY" is defined in .env.example but never used
+
+or
+
+Environment variable "API_KEY" is defined in .env.example but missing in .env
+```
+
 ### Monorepo support
+
 The extension automatically finds the nearest `.env` file by walking up the directory tree from your source file. This means you can have multiple `.env` files in a monorepo and the extension will always compare against the correct one.
 
 ```

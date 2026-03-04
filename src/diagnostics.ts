@@ -3,7 +3,7 @@ import { isSourceFilePath } from "./core/sourceFileMatcher";
 import { parseEnvKeys } from "./core/envParser";
 import { scanForEnvUsages } from "./core/scanner";
 import { findNearestEnv } from "./core/fileWalker";
-import { ENV_FILE_NAME } from "./core/constants";
+import { ENV_EXAMPLE_FILE_NAME, ENV_FILE_NAME } from "./core/constants";
 
 /**
  * The single DiagnosticCollection that owns all our warnings.
@@ -97,12 +97,16 @@ function checkUnusedKeys(
   }
 
   for (const doc of openDocs) {
-    if (!isEnvFile(doc)) {
+    const envFileType = getEnvFileType(doc);
+    if (!envFileType) {
       continue;
     }
 
     const diagnostics: vscode.Diagnostic[] = [];
     const lines = doc.getText().split("\n");
+    const siblingEnvPath =
+      envFileType === "example" ? findNearestEnv(doc.fileName) : undefined;
+    const siblingEnvKeys = siblingEnvPath ? parseEnvKeys(siblingEnvPath) : new Set<string>();
 
     lines.forEach((line, lineIndex) => {
       const trimmed = line.trim();
@@ -117,7 +121,20 @@ function checkUnusedKeys(
 
       const key = trimmed.substring(0, eqIndex).trim();
 
-      if (key && !allUsedKeys.has(key)) {
+      const existsInEnv = envFileType === "example" && siblingEnvKeys.has(key);
+      if (key && envFileType === "example" && !existsInEnv) {
+        const range = new vscode.Range(lineIndex, 0, lineIndex, key.length);
+        const diagnostic = new vscode.Diagnostic(
+          range,
+          `Environment variable "${key}" is defined in ${ENV_EXAMPLE_FILE_NAME} but missing in ${ENV_FILE_NAME}`,
+          vscode.DiagnosticSeverity.Warning,
+        );
+        diagnostic.source = "dotenv-diff";
+        diagnostics.push(diagnostic);
+        return;
+      }
+
+      if (key && envFileType === "env" && !allUsedKeys.has(key)) {
         const range = new vscode.Range(lineIndex, 0, lineIndex, key.length);
         const diagnostic = new vscode.Diagnostic(
           range,
@@ -140,4 +157,20 @@ function checkUnusedKeys(
  */
 function isEnvFile(doc: vscode.TextDocument): boolean {
   return doc.fileName.endsWith(ENV_FILE_NAME);
+}
+
+function isEnvExampleFile(doc: vscode.TextDocument): boolean {
+  return doc.fileName.endsWith(ENV_EXAMPLE_FILE_NAME);
+}
+
+function getEnvFileType(doc: vscode.TextDocument): "env" | "example" | undefined {
+  if (isEnvFile(doc)) {
+    return "env";
+  }
+
+  if (isEnvExampleFile(doc)) {
+    return "example";
+  }
+
+  return undefined;
 }

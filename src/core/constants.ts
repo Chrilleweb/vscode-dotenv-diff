@@ -5,6 +5,12 @@
 export const ENV_FILE_NAME = ".env";
 
 /**
+ * The name of the environment example file.
+ * Used for diagnostics and file matching.
+ */
+export const ENV_EXAMPLE_FILE_NAME = ".env.example";
+
+/**
  * Supported source file extensions.
  * This is the single source of truth – SOURCE_FILE_GLOB and EXCLUDE_FILE_GLOB
  * are derived from this list, as is isSourceFilePath() in sourceFileMatcher.ts.

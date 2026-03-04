@@ -7,6 +7,7 @@ import { findNearestEnv } from "../../core/fileWalker";
 import { scanForEnvUsages } from "../../core/scanner";
 import { isSourceFilePath } from "../../core/sourceFileMatcher";
 import {
+  ENV_EXAMPLE_FILE_NAME,
   ENV_FILE_NAME,
   IMPORT_META_ENV_PATTERN,
   PROCESS_ENV_PATTERN,
@@ -120,6 +121,48 @@ suite("core integration", () => {
     assert.strictEqual(usedKeys.has("BUILD_ID"), true);
     assert.strictEqual(usedKeys.has("SHOULD_NOT_BE_INCLUDED"), false);
     assert.strictEqual(usedKeys.has("README_KEY"), false);
+  });
+
+  test("treats .env.example keys as non-unused when they exist in .env", () => {
+    const envPath = writeFile(path.join("apps", "web", ".env"), "DB_HOST=localhost\n");
+    const examplePath = writeFile(
+      path.join("apps", "web", ".env.example"),
+      "DB_HOST=\nMISSING_IN_ENV=\n",
+    );
+
+    const envKeys = parseEnvKeys(envPath);
+    const exampleKeys = parseEnvKeys(examplePath);
+    const allFiles = collectFilesRecursively(tmpDir);
+    const usedKeys = collectUsedKeysAcrossWorkspace(allFiles);
+
+    const unusedExampleKeys = [...exampleKeys].filter(
+      (key) => !usedKeys.has(key) && !envKeys.has(key),
+    );
+
+    assert.deepStrictEqual(unusedExampleKeys, ["MISSING_IN_ENV"]);
+  });
+
+  test("builds warning entries for keys defined in .env.example but missing in .env", () => {
+    const envPath = writeFile(path.join("apps", "web", ".env"), "DB_HOST=localhost\n");
+    const examplePath = writeFile(
+      path.join("apps", "web", ".env.example"),
+      "DB_HOST=\nAPI_KEY=\nAUTH_SECRET=\n",
+    );
+
+    const envKeys = parseEnvKeys(envPath);
+    const exampleKeys = parseEnvKeys(examplePath);
+
+    const missingFromEnv = [...exampleKeys].filter((key) => !envKeys.has(key));
+    const warnings = missingFromEnv.map(
+      (key) =>
+        `Environment variable "${key}" is defined in ${ENV_EXAMPLE_FILE_NAME} but missing in ${ENV_FILE_NAME}`,
+    );
+
+    assert.deepStrictEqual(missingFromEnv, ["API_KEY", "AUTH_SECRET"]);
+    assert.deepStrictEqual(warnings, [
+      'Environment variable "API_KEY" is defined in .env.example but missing in .env',
+      'Environment variable "AUTH_SECRET" is defined in .env.example but missing in .env',
+    ]);
   });
 
   test("enables SvelteKit env.KEY scanning only when a $env import is present", () => {

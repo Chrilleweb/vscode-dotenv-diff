@@ -51,7 +51,50 @@ Environment variable "DB_HOST" is defined in .env but never used
 
 ---
 
-## 3. Monorepo support
+## 3. Missing variables from `.env.example`
+
+Keys in `.env.example` are also checked against the nearest `.env`.
+If a key from `.env.example` does not exist in `.env`, it is flagged with a warning.
+
+![Unused in .env.example](./screenshots/unused-example.png)
+
+![Unused in .env from example](./screenshots/unused-example-env.png)
+
+**Example:**
+
+`.env.example`
+```
+API_KEY=
+API_URL=
+```
+
+`.env`
+```
+API_URL=https://example.com
+```
+
+**Warning message:**
+```
+Environment variable "API_KEY" is defined in .env.example but missing in .env
+```
+
+**Example 2:**
+
+`.env.example`
+```
+API_KEY=
+```
+
+But `API_KEY` is never referenced in any source file.
+
+**Warning message:**
+```
+Environment variable "API_KEY" is defined in .env.example but never used
+```
+
+---
+
+## 4. Monorepo support
 
 The extension automatically finds the nearest `.env` file by walking up the directory tree from the source file. No configuration required.
 
@@ -73,7 +116,7 @@ Each source file always resolves to its nearest `.env` — independently of othe
 
 ---
 
-## 4. Supported syntax
+## 5. Supported syntax
 
 The extension recognises the following patterns:
 
@@ -91,7 +134,7 @@ Only `UPPER_CASE` key names are matched, which is the standard convention for en
 
 ---
 
-## 5. Skipped files
+## 6. Skipped files
 
 The extension intentionally skips:
 
