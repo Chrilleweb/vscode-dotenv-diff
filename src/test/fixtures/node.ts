@@ -22,3 +22,15 @@ export const multipleProcessEnvDotNotation = `
 export const processEnvLowercaseKey = `
   const apiUrl = process.env.public_api_url;
 `;
+
+export const processEnvDestructuring = `
+  const { PUBLIC_API_URL } = process.env;
+`;
+
+export const processEnvDestructuringWithAliasAndDefault = `
+  const {
+    SECRET_KEY: key,
+    API_TOKEN = "fallback",
+    PUBLIC_URL,
+  } = process.env;
+`;

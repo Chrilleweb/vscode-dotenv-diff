@@ -16,7 +16,7 @@
 
 ![Not Defined](./docs/screenshots/not-defined.png)
 
-If your `.ts` or `.js` file references `SECRET` and it's not defined in the nearest `.env` file, you'll see a warning underline directly in the editor.
+If your source file references `SECRET` and it's not defined in the nearest `.env` file, you'll see a warning underline directly in the editor.
 
 ```
 Environment variable "SECRET" is not defined in .env

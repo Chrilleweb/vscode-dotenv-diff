@@ -6,7 +6,7 @@ This document describes everything `vscode-dotenv-diff` can do, and how it behav
 
 ## 1. Missing environment variables
 
-When a `.ts` or `.js` file references an environment variable and that key is not present in the nearest `.env` file, the extension underlines the reference with a warning.
+When a source file references an environment variable and that key is not present in the nearest `.env` file, the extension underlines the reference with a warning.
 
 ![Not Defined](./screenshots/not-defined.png)
 
@@ -121,16 +121,35 @@ Each source file always resolves to its nearest `.env` — independently of othe
 The extension recognises the following patterns:
 
 ```typescript
-process.env.MY_KEY          // dot notation
-process.env["MY_KEY"]       // bracket notation, double quotes
-process.env['MY_KEY']       // bracket notation, single quotes
-import.meta.env.MY_KEY       // dot notation
-import.meta.env["MY_KEY"]    // bracket notation, double quotes
-import.meta.env['MY_KEY']    // bracket notation, single quotes
-env.PUBLIC_API_URL; // SvelteKit $env usage
+// Node.js – dot and bracket notation
+process.env.MY_KEY
+process.env["MY_KEY"]
+process.env['MY_KEY']
+
+// Node.js – destructuring
+const { MY_KEY } = process.env
+const { MY_KEY: alias, OTHER_KEY = "fallback" } = process.env
+
+// Vite / import.meta
+import.meta.env.MY_KEY
+import.meta.env["MY_KEY"]
+import.meta.env['MY_KEY']
+
+// SvelteKit – dynamic (env object)
+import { env } from '$env/dynamic/private';
+import { env } from '$env/dynamic/public';
+env.MY_KEY
+
+// SvelteKit – static (named imports)
+import { MY_KEY } from '$env/static/private';
+import { MY_KEY } from '$env/static/public';
+import { MY_KEY as alias } from '$env/static/private';
+MY_KEY
 ```
 
 Only `UPPER_CASE` key names are matched, which is the standard convention for environment variables.
+
+Scanned file types: .ts, .js, .mjs, .cjs, .mts, .cts, .svelte
 
 ---
 
@@ -146,3 +165,7 @@ The extension intentionally skips:
 ## Known limitations
 
 - `.env.local`, `.env.production` etc. are not resolved — only `.env`
+- Template literal expressions are scanned, but dynamic key access is not supported:
+```typescript
+  process.env[`MY_${suffix}`] // not detected
+```
