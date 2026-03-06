@@ -58,7 +58,7 @@ If a key from `.env.example` does not exist in `.env` or is never used, it is fl
 
 ![Unused in .env.example](./screenshots/unused-example.png)
 
-![Unused in .env from example](./screenshots/unused-example-env.png)
+![Unused in .env from example](./screenshots/missing-example-env.png)
 
 **Example:**
 
