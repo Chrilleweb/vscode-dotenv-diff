@@ -32,7 +32,7 @@ If a key in your `.env` file is never referenced, the line is flagged with a war
 Environment variable "DB_HOST" is defined in .env but never used
 ```
 
-### Missing variables from `.env.example`
+### Missing / unused variables from `.env.example`
 
 ![Unused in .env.example](./docs/screenshots/unused-example.png)
 

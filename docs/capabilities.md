@@ -51,7 +51,7 @@ Environment variable "DB_HOST" is defined in .env but never used
 
 ---
 
-## 3. Missing variables from `.env.example`
+## 3. Missing / unused variables from `.env.example`
 
 Keys in `.env.example` are also checked against the nearest `.env`.
 If a key from `.env.example` does not exist in `.env` or is never used, it is flagged with a warning.
