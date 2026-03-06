@@ -175,10 +175,21 @@ function isEnvFile(doc: vscode.TextDocument): boolean {
   return doc.fileName.endsWith(ENV_FILE_NAME);
 }
 
+/**
+ * Helper function to determine if a document is a .env.example file.
+ * @param doc The TextDocument to check
+ * @returns True if the document's filename ends with .env.example, false otherwise
+ */
 function isEnvExampleFile(doc: vscode.TextDocument): boolean {
   return doc.fileName.endsWith(ENV_EXAMPLE_FILE_NAME);
 }
 
+/**
+ * Helper function to determine if a document is either a .env or .env.example file,
+ * and returns which type it is. Used to route the correct diagnostics logic.
+ * @param doc The TextDocument to check
+ * @returns "env" if it's a .env file, "example" if it's a .env.example file, or undefined if neither
+ */
 function getEnvFileType(
   doc: vscode.TextDocument,
 ): "env" | "example" | undefined {
