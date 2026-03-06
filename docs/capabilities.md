@@ -164,7 +164,7 @@ The extension intentionally skips:
 
 ## Known limitations
 
-- `.env.local`, `.env.production` etc. are not resolved — only `.env`
+- `.env.local`, `.env.production` etc. are not resolved — only `.env` and `.env.example`
 - Template literal expressions are scanned, but dynamic key access is not supported:
 ```typescript
   process.env[`MY_${suffix}`] // not detected
