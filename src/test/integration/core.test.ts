@@ -106,8 +106,14 @@ suite("core integration", () => {
   });
 
   test("aggregates used keys across workspace while skipping test and non-source files", () => {
-    writeFile(path.join("src", "feature.ts"), "const x = process.env.FEATURE_FLAG;\n");
-    writeFile(path.join("src", "build.mjs"), "const id = import.meta.env.BUILD_ID;\n");
+    writeFile(
+      path.join("src", "feature.ts"),
+      "const x = process.env.FEATURE_FLAG;\n",
+    );
+    writeFile(
+      path.join("src", "build.mjs"),
+      "const id = import.meta.env.BUILD_ID;\n",
+    );
     writeFile(
       path.join("src", "feature.test.ts"),
       "const t = process.env.SHOULD_NOT_BE_INCLUDED;\n",
@@ -123,8 +129,11 @@ suite("core integration", () => {
     assert.strictEqual(usedKeys.has("README_KEY"), false);
   });
 
-  test("treats .env.example keys as non-unused when they exist in .env", () => {
-    const envPath = writeFile(path.join("apps", "web", ".env"), "DB_HOST=localhost\n");
+  test("treats .env.example keys as unused when they are not referenced in source", () => {
+    const envPath = writeFile(
+      path.join("apps", "web", ".env"),
+      "DB_HOST=localhost\n",
+    );
     const examplePath = writeFile(
       path.join("apps", "web", ".env.example"),
       "DB_HOST=\nMISSING_IN_ENV=\n",
@@ -136,14 +145,17 @@ suite("core integration", () => {
     const usedKeys = collectUsedKeysAcrossWorkspace(allFiles);
 
     const unusedExampleKeys = [...exampleKeys].filter(
-      (key) => !usedKeys.has(key) && !envKeys.has(key),
+      (key) => !usedKeys.has(key),
     );
 
-    assert.deepStrictEqual(unusedExampleKeys, ["MISSING_IN_ENV"]);
+    assert.deepStrictEqual(unusedExampleKeys, ["DB_HOST", "MISSING_IN_ENV"]);
   });
 
   test("builds warning entries for keys defined in .env.example but missing in .env", () => {
-    const envPath = writeFile(path.join("apps", "web", ".env"), "DB_HOST=localhost\n");
+    const envPath = writeFile(
+      path.join("apps", "web", ".env"),
+      "DB_HOST=localhost\n",
+    );
     const examplePath = writeFile(
       path.join("apps", "web", ".env.example"),
       "DB_HOST=\nAPI_KEY=\nAUTH_SECRET=\n",
@@ -182,22 +194,30 @@ suite("core integration", () => {
       ["PUBLIC_WEB_URL"],
     );
 
-    assert.strictEqual(SVELTEKIT_ENV_IMPORT_PATTERN.test(dynamicPublicImport), true);
+    assert.strictEqual(
+      SVELTEKIT_ENV_IMPORT_PATTERN.test(dynamicPublicImport),
+      true,
+    );
     assert.strictEqual(SVELTEKIT_ENV_PATTERN.test("env.PUBLIC_API_URL"), true);
   });
 
   test("core regex patterns match expected env usage formats", () => {
-    const processEnvSource = "process.env.MY_KEY process.env['OTHER_KEY'] process.env[\"THIRD_KEY\"]";
+    const processEnvSource =
+      "process.env.MY_KEY process.env['OTHER_KEY'] process.env[\"THIRD_KEY\"]";
     const importMetaSource = "import.meta.env.VITE_API_URL";
 
-    const processMatches = Array.from(processEnvSource.matchAll(PROCESS_ENV_PATTERN)).map(
-      (match) => match[1] ?? match[2],
-    );
-    const importMetaMatches = Array.from(importMetaSource.matchAll(IMPORT_META_ENV_PATTERN)).map(
-      (match) => match[1],
-    );
+    const processMatches = Array.from(
+      processEnvSource.matchAll(PROCESS_ENV_PATTERN),
+    ).map((match) => match[1] ?? match[2]);
+    const importMetaMatches = Array.from(
+      importMetaSource.matchAll(IMPORT_META_ENV_PATTERN),
+    ).map((match) => match[1]);
 
-    assert.deepStrictEqual(processMatches, ["MY_KEY", "OTHER_KEY", "THIRD_KEY"]);
+    assert.deepStrictEqual(processMatches, [
+      "MY_KEY",
+      "OTHER_KEY",
+      "THIRD_KEY",
+    ]);
     assert.deepStrictEqual(importMetaMatches, ["VITE_API_URL"]);
   });
 });

@@ -38,7 +38,7 @@ export function refreshAllDiagnostics(
  * that are not defined in the nearest .env file.
  * @param collection The DiagnosticCollection to update with new diagnostics
  * @param openDocs The currently open text documents in the editor
- * @return void 
+ * @return void
  */
 function checkMissingKeys(
   collection: vscode.DiagnosticCollection,
@@ -106,7 +106,9 @@ function checkUnusedKeys(
     const lines = doc.getText().split("\n");
     const siblingEnvPath =
       envFileType === "example" ? findNearestEnv(doc.fileName) : undefined;
-    const siblingEnvKeys = siblingEnvPath ? parseEnvKeys(siblingEnvPath) : new Set<string>();
+    const siblingEnvKeys = siblingEnvPath
+      ? parseEnvKeys(siblingEnvPath)
+      : new Set<string>();
 
     lines.forEach((line, lineIndex) => {
       const trimmed = line.trim();
@@ -122,15 +124,29 @@ function checkUnusedKeys(
       const key = trimmed.substring(0, eqIndex).trim();
 
       const existsInEnv = envFileType === "example" && siblingEnvKeys.has(key);
-      if (key && envFileType === "example" && !existsInEnv) {
+      if (key && envFileType === "example") {
         const range = new vscode.Range(lineIndex, 0, lineIndex, key.length);
-        const diagnostic = new vscode.Diagnostic(
-          range,
-          `Environment variable "${key}" is defined in ${ENV_EXAMPLE_FILE_NAME} but missing in ${ENV_FILE_NAME}`,
-          vscode.DiagnosticSeverity.Warning,
-        );
-        diagnostic.source = "dotenv-diff";
-        diagnostics.push(diagnostic);
+
+        if (!existsInEnv) {
+          const missingDiagnostic = new vscode.Diagnostic(
+            range,
+            `Environment variable "${key}" is defined in ${ENV_EXAMPLE_FILE_NAME} but missing in ${ENV_FILE_NAME}`,
+            vscode.DiagnosticSeverity.Warning,
+          );
+          missingDiagnostic.source = "dotenv-diff";
+          diagnostics.push(missingDiagnostic);
+        }
+
+        if (!allUsedKeys.has(key)) {
+          const unusedExampleDiagnostic = new vscode.Diagnostic(
+            range,
+            `Environment variable "${key}" is defined in ${ENV_EXAMPLE_FILE_NAME} but never used`,
+            vscode.DiagnosticSeverity.Warning,
+          );
+          unusedExampleDiagnostic.source = "dotenv-diff";
+          diagnostics.push(unusedExampleDiagnostic);
+        }
+
         return;
       }
 
@@ -163,7 +179,9 @@ function isEnvExampleFile(doc: vscode.TextDocument): boolean {
   return doc.fileName.endsWith(ENV_EXAMPLE_FILE_NAME);
 }
 
-function getEnvFileType(doc: vscode.TextDocument): "env" | "example" | undefined {
+function getEnvFileType(
+  doc: vscode.TextDocument,
+): "env" | "example" | undefined {
   if (isEnvFile(doc)) {
     return "env";
   }
