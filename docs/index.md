@@ -6,18 +6,18 @@ Welcome to the official documentation for `vscode-dotenv-diff`, a VS Code extens
 
 ## What is vscode-dotenv-diff?
 
-When building applications, it's easy to reference environment variables in your code but forget to define it in your `.env` file — or to leave stale keys in `.env` that are no longer used anywhere. Both problems are silent and hard to spot.
+When building applications, it’s easy to reference environment variables in code without defining them in `.env`, or to keep stale keys in `.env` and `.env.example` that are no longer used.
 
-`vscode-dotenv-diff` solves this by analysing your source files and surfacing warnings exactly where the problem is, without any configuration.
+`vscode-dotenv-diff` scans your source files and compares them with the nearest `.env` and `.env.example`, then surfaces clear warnings directly in the editor — with zero configuration.
 
 ---
 
 ## Documentation
 
-| Document | Description |
-|---|---|
+| Document                          | Description                                 |
+| --------------------------------- | ------------------------------------------- |
 | [Capabilities](./capabilities.md) | What the extension can do and how to use it |
-| [Architecture](./architecture.md) | How the codebase is structured and why |
+| [Architecture](./architecture.md) | How the codebase is structured and why      |
 
 ---
 
