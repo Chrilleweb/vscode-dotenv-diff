@@ -34,45 +34,20 @@ Environment variable "DB_HOST" is defined in .env but never used
 
 ### Missing variables from `.env.example`
 
-Keys in `.env.example` are also checked against the nearest `.env`.
-If a key from `.env.example` does not exist in `.env`, it is flagged with a warning.
-
 ![Unused in .env from example](./docs/screenshots/missing-example-env.png)
 
-**Example:**
+Against the nearest `.env`, keys in `.env.example` are checked for existence. If a key from `.env.example` is missing in `.env`, it is flagged with a warning.
 
-`.env.example`
-```
-API_KEY=
-API_URL=
-```
-
-`.env`
-```
-API_URL=https://example.com
-```
-
-**Warning message:**
 ```
 Environment variable "API_KEY" is defined in .env.example but missing in .env
 ```
 
 ### Unused variables in `.env.example`
 
-If a key from `.env.example` is not referenced in any source file, it is flagged with a warning directly on that line in `.env.example`.
-
 ![Unused in .env.example](./docs/screenshots/unused-example.png)
 
-**Example:**
+If a key from `.env.example` is not referenced in any source file, it is flagged with a warning directly on that line in `.env.example`.
 
-`.env.example`
-```
-API_KEY=
-```
-
-But `API_KEY` is never referenced in any source file.
-
-**Warning message:**
 ```
 Environment variable "API_KEY" is defined in .env.example but never used
 ```
