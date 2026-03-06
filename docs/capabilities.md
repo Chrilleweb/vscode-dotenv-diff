@@ -51,12 +51,10 @@ Environment variable "DB_HOST" is defined in .env but never used
 
 ---
 
-## 3. Missing / unused variables from `.env.example`
+## 3. Missing variables from `.env.example`
 
 Keys in `.env.example` are also checked against the nearest `.env`.
-If a key from `.env.example` does not exist in `.env` or is never used, it is flagged with a warning.
-
-![Unused in .env.example](./screenshots/unused-example.png)
+If a key from `.env.example` does not exist in `.env`, it is flagged with a warning.
 
 ![Unused in .env from example](./screenshots/missing-example-env.png)
 
@@ -78,7 +76,13 @@ API_URL=https://example.com
 Environment variable "API_KEY" is defined in .env.example but missing in .env
 ```
 
-**Example 2:**
+## 4. Unused variables in `.env.example`
+
+If a key from `.env.example` is not referenced in any source file, it is flagged with a warning directly on that line in `.env.example`.
+
+![Unused in .env.example](./screenshots/unused-example.png)
+
+**Example:**
 
 `.env.example`
 ```
@@ -94,7 +98,7 @@ Environment variable "API_KEY" is defined in .env.example but never used
 
 ---
 
-## 4. Monorepo support
+## 5. Monorepo support
 
 The extension automatically finds the nearest `.env` file by walking up the directory tree from the source file. No configuration required.
 
@@ -116,7 +120,7 @@ Each source file always resolves to its nearest `.env` — independently of othe
 
 ---
 
-## 5. Supported syntax
+## 6. Supported syntax
 
 The extension recognises the following patterns:
 
@@ -153,7 +157,7 @@ Scanned file types: .ts, .js, .mjs, .cjs, .mts, .cts, .svelte
 
 ---
 
-## 6. Skipped files
+## 7. Skipped files
 
 The extension intentionally skips:
 

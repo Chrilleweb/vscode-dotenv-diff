@@ -32,22 +32,52 @@ If a key in your `.env` file is never referenced, the line is flagged with a war
 Environment variable "DB_HOST" is defined in .env but never used
 ```
 
-### Missing / unused variables from `.env.example`
+### Missing variables from `.env.example`
 
-![Unused in .env.example](./docs/screenshots/unused-example.png)
+Keys in `.env.example` are also checked against the nearest `.env`.
+If a key from `.env.example` does not exist in `.env`, it is flagged with a warning.
 
 ![Unused in .env from example](./docs/screenshots/missing-example-env.png)
 
-Keys in `.env.example` are also checked against the nearest `.env`.
-If a key from `.env.example` does not exist in `.env` or is never used, it is flagged with a warning.
+**Example:**
 
+`.env.example`
 ```
-Environment variable "API_KEY" is defined in .env.example but never used
+API_KEY=
+API_URL=
+```
 
-or
+`.env`
+```
+API_URL=https://example.com
+```
 
+**Warning message:**
+```
 Environment variable "API_KEY" is defined in .env.example but missing in .env
 ```
+
+### Unused variables in `.env.example`
+
+If a key from `.env.example` is not referenced in any source file, it is flagged with a warning directly on that line in `.env.example`.
+
+![Unused in .env.example](./docs/screenshots/unused-example.png)
+
+**Example:**
+
+`.env.example`
+```
+API_KEY=
+```
+
+But `API_KEY` is never referenced in any source file.
+
+**Warning message:**
+```
+Environment variable "API_KEY" is defined in .env.example but never used
+```
+
+---
 
 ### Monorepo support
 
