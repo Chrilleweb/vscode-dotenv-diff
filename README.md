@@ -39,7 +39,7 @@ Environment variable "DB_HOST" is defined in .env but never used
 ![Unused in .env from example](./docs/screenshots/unused-example-env.png)
 
 Keys in `.env.example` are also checked against the nearest `.env`.
-If a key from `.env.example` does not exist in `.env`, it is flagged with a warning.
+If a key from `.env.example` does not exist in `.env` or is never used, it is flagged with a warning.
 
 ```
 Environment variable "API_KEY" is defined in .env.example but never used
