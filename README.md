@@ -19,7 +19,7 @@ When editing `.env`, the extension suggests keys that are used in source files b
 
 - Suggests all missing keys automatically on empty lines
 - Includes `Add all missing environment variables` for one-click bulk insert
-- Inserts keys as `KEY=` (no default value)
+- Inserts keys as `KEY=`
 
 ### Missing variables in code
 
