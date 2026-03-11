@@ -10,6 +10,8 @@ When editing a `.env` file, the extension suggests environment variable keys tha
 
 Suggestions appear on empty lines.
 
+![Autocomplete](./screenshots/auto.gif)
+
 **Example suggestions:**
 
 ```text
