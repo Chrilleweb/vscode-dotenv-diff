@@ -4,7 +4,27 @@ This document describes everything `vscode-dotenv-diff` can do, and how it behav
 
 ---
 
-## 1. Missing environment variables
+## 1. Autocomplete for missing keys in `.env`
+
+When editing a `.env` file, the extension suggests environment variable keys that are used in source files but missing from the current `.env` document.
+
+Suggestions appear on empty lines.
+
+**Example suggestions:**
+
+```text
+API_URL=
+JWT_SECRET=
+REDIS_URL=
+```
+
+Selecting a suggestion inserts the key in the form `KEY=`.
+
+If multiple keys are missing, the suggestion list also includes `Add all missing environment variables`, which inserts all missing keys in one action.
+
+---
+
+## 2. Missing environment variables
 
 When a source file references an environment variable and that key is not present in the nearest `.env` file, the extension underlines the reference with a warning.
 
@@ -31,7 +51,7 @@ Environment variable "SECRET" is not defined in .env
 
 ---
 
-## 2. Unused environment variables
+## 3. Unused environment variables
 
 When a key is defined in a `.env` file but never referenced anywhere in the workspace, the key is flagged with a warning directly on that line in the `.env` file.
 
@@ -51,7 +71,7 @@ Environment variable "DB_HOST" is defined in .env but never used
 
 ---
 
-## 3. Monorepo support
+## 4. Monorepo support
 
 The extension automatically finds the nearest `.env` file by walking up the directory tree from the source file. No configuration required.
 
@@ -73,7 +93,7 @@ Each source file always resolves to its nearest `.env` — independently of othe
 
 ---
 
-## 4. Supported syntax
+## 5. Supported syntax
 
 The extension recognises the following patterns:
 
@@ -110,7 +130,7 @@ Scanned file types: .ts, .js, .mjs, .cjs, .mts, .cts, .svelte
 
 ---
 
-## 5. Skipped files
+## 6. Skipped files
 
 The extension intentionally skips:
 

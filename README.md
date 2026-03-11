@@ -11,6 +11,18 @@
 
 ## Features
 
+### Autocomplete for missing keys in `.env` (GIF coming soon)
+
+When editing `.env`, the extension suggests keys that are used in source files but missing from the current file.
+
+- Suggests all missing keys automatically on empty lines
+- Includes `Add all missing environment variables` for one-click bulk insert
+- Inserts keys as `KEY=` (no default value)
+
+> Demo GIF placeholder: `./docs/screenshots/autocomplete-missing-env.gif`
+> 
+> Add the GIF at that path when ready and replace this placeholder block with the image.
+
 ### Missing variables in code
 
 ![Not Defined](./docs/screenshots/not-defined.png)

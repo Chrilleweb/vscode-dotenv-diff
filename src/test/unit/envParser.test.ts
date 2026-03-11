@@ -2,7 +2,7 @@ import * as assert from "assert";
 import * as fs from "fs";
 import * as os from "os";
 import * as path from "path";
-import { parseEnvKeys } from "../../core/envParser";
+import { parseEnvKeys, parseEnvKeysFromText } from "../../core/envParser";
 
 suite("envParser", () => {
   let tmpFile: string;
@@ -48,5 +48,13 @@ suite("envParser", () => {
   test("returns empty set if file does not exist", () => {
     const keys = parseEnvKeys("/nonexistent/.env");
     assert.strictEqual(keys.size, 0);
+  });
+
+  test("parses keys directly from .env text", () => {
+    const keys = parseEnvKeysFromText("# comment\nAPI_URL=https://api.example.com\nJWT_SECRET=\n");
+
+    assert.strictEqual(keys.has("API_URL"), true);
+    assert.strictEqual(keys.has("JWT_SECRET"), true);
+    assert.strictEqual(keys.has("# comment"), false);
   });
 });
