@@ -4,7 +4,7 @@
   "description": "Catch missing and unused environment variables against your .env file",
   "version": "0.6.0",
   "engines": {
-    "vscode": "^1.109.0"
+    "vscode": "^1.110.0"
   },
   "categories": [
     "Linters"

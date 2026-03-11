@@ -60,7 +60,7 @@ apps/
 
 ## Requirements
 
-- VS Code `1.109.0` or higher
+- VS Code `1.110.0` or higher
 - A `.env` file somewhere in your project tree
 
 ---
