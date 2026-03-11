@@ -1,6 +1,6 @@
 # [VS Code Dotenv-diff](https://marketplace.visualstudio.com/items?itemName=Chrilleweb.dotenv-diff) – Documentation
 
-Welcome to the official documentation for `vscode-dotenv-diff`, a VS Code extension that catches missing and unused environment variables directly in your editor.
+Welcome to the official documentation for `vscode-dotenv-diff`, a VS Code extension that autocompletes missing `.env` variables and catches missing/unused keys directly in your editor.
 
 ---
 
@@ -16,7 +16,7 @@ When building applications, it's easy to reference `process.env.MY_KEY` in your 
 
 | Document | Description |
 |---|---|
-| [Capabilities](./capabilities.md) | What the extension can do and how to use it |
+| [Capabilities](./capabilities.md) | Features and behavior (autocomplete, missing, unused, monorepo) |
 | [Architecture](./architecture.md) | How the codebase is structured and why |
 
 ---

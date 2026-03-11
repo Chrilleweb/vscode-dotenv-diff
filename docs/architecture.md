@@ -10,7 +10,8 @@ This document explains how `vscode-dotenv-diff` is structured, how the modules r
 src/
 ├── core/                 # Pure logic – no VS Code dependency
 ├── test/                 # Pure logic tests – no VS Code dependency
-├── diagnostics.ts        # Orchestrates all warning logic across open documents
+├── completionProvider.ts # .env autocomplete provider for missing keys
+├── diagnostics.ts        # Warning logic across open documents
 ├── extension.ts          # Entry point – activates the extension and registers listeners
 ```
 
@@ -20,6 +21,6 @@ The key architectural split is between `core/` and the rest. Everything inside `
 
 ## Design principles
 
-**Isolate VS Code.** Only `extension.ts` and `diagnostics.ts` import from `vscode`. Everything in `core/` is plain TypeScript that works in any environment — making it easy to test, reuse, and reason about independently.
+ Everything in `core/` is plain TypeScript that works in any environment — making it easy to test, reuse, and reason about independently.
 
 **No configuration.** The extension works out of the box. Decisions like "find the nearest `.env`" are made automatically so the user never has to think about setup.
