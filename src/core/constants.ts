@@ -5,6 +5,27 @@
 export const ENV_FILE_NAME = ".env";
 
 /**
+ * Environment variable keys that are provided implicitly by runtime/build tools
+ * and should not be suggested or warned about by default.
+ */
+export const DEFAULT_EXCLUDE_KEYS = [
+  "PWD",
+  "NODE_ENV",
+  "VITE_MODE",
+  "MODE",
+  "BASE_URL",
+  "PROD",
+  "DEV",
+  "SSR",
+  "DOTENV_KEY",
+] as const;
+
+/**
+ * Set version of DEFAULT_EXCLUDE_KEYS for fast lookup during scanning/diagnostics.
+ */
+export const DEFAULT_EXCLUDE_KEY_SET = new Set<string>(DEFAULT_EXCLUDE_KEYS);
+
+/**
  * Supported source file extensions.
  * This is the single source of truth – SOURCE_FILE_GLOB and EXCLUDE_FILE_GLOB
  * are derived from this list, as is isSourceFilePath() in sourceFileMatcher.ts.
