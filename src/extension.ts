@@ -20,6 +20,9 @@ import {
 export async function activate(
   context: vscode.ExtensionContext,
 ): Promise<void> {
+  const DIAGNOSTICS_DEBOUNCE_MS = 120;
+  const DIAGNOSTICS_MAX_STALE_MS = 350;
+
   const collection = createDiagnosticCollection();
 
   const workspaceFiles = await vscode.workspace.findFiles(
@@ -39,6 +42,46 @@ export async function activate(
 
   const refresh = () =>
     refreshAllDiagnostics(collection, workspaceFileContents);
+  let diagnosticsRefreshTimer: NodeJS.Timeout | undefined;
+  let lastDiagnosticsRefreshAt = 0;
+
+  const runDiagnosticsRefresh = () => {
+    refresh();
+    lastDiagnosticsRefreshAt = Date.now();
+  };
+
+  const scheduleDiagnosticsRefresh = (mode: "immediate" | "debounced" = "debounced") => {
+    if (mode === "immediate") {
+      if (diagnosticsRefreshTimer) {
+        clearTimeout(diagnosticsRefreshTimer);
+        diagnosticsRefreshTimer = undefined;
+      }
+
+      runDiagnosticsRefresh();
+      return;
+    }
+
+    const now = Date.now();
+    if (now - lastDiagnosticsRefreshAt >= DIAGNOSTICS_MAX_STALE_MS) {
+      if (diagnosticsRefreshTimer) {
+        clearTimeout(diagnosticsRefreshTimer);
+        diagnosticsRefreshTimer = undefined;
+      }
+
+      runDiagnosticsRefresh();
+      return;
+    }
+
+    if (diagnosticsRefreshTimer) {
+      clearTimeout(diagnosticsRefreshTimer);
+    }
+
+    // Debounce frequent editor/workspace events to avoid diagnostics flicker.
+    diagnosticsRefreshTimer = setTimeout(() => {
+      runDiagnosticsRefresh();
+      diagnosticsRefreshTimer = undefined;
+    }, DIAGNOSTICS_DEBOUNCE_MS);
+  };
 
   const envCompletionProvider = createEnvCompletionProvider(workspaceFileContents);
 
@@ -57,6 +100,7 @@ export async function activate(
     const missingKeys = getMissingEnvKeysForEnvText(
       editor.document.getText(),
       workspaceFileContents,
+      editor.document.fileName,
     );
     if (missingKeys.length === 0) {
       return;
@@ -90,6 +134,7 @@ export async function activate(
       const activeMissingKeys = getMissingEnvKeysForEnvText(
         activeEditor.document.getText(),
         workspaceFileContents,
+        activeEditor.document.fileName,
       );
       if (activeMissingKeys.length === 0) {
         return;
@@ -99,20 +144,24 @@ export async function activate(
     }, 50);
   };
 
-  refresh();
+  runDiagnosticsRefresh();
 
   context.subscriptions.push(
     vscode.workspace.onDidOpenTextDocument((doc) => {
       workspaceFileContents.set(doc.fileName, doc.getText());
-      refresh();
+      scheduleDiagnosticsRefresh("immediate");
 
       if (vscode.window.activeTextEditor?.document === doc) {
         triggerEnvSuggestionsIfNeeded(vscode.window.activeTextEditor);
       }
     }),
     vscode.workspace.onDidChangeTextDocument((e) => {
+      if (e.contentChanges.length === 0) {
+        return;
+      }
+
       workspaceFileContents.set(e.document.fileName, e.document.getText());
-      refresh();
+      scheduleDiagnosticsRefresh();
 
       if (vscode.window.activeTextEditor?.document === e.document) {
         triggerEnvSuggestionsIfNeeded(vscode.window.activeTextEditor);
@@ -124,14 +173,29 @@ export async function activate(
     vscode.window.onDidChangeTextEditorSelection((event) => {
       triggerEnvSuggestionsIfNeeded(event.textEditor);
     }),
-    vscode.workspace.onDidCloseTextDocument(() => refresh()),
-    vscode.workspace.onDidSaveTextDocument(() => refresh()),
+    vscode.workspace.onDidCloseTextDocument((doc) => {
+      workspaceFileContents.delete(doc.fileName);
+      collection.delete(doc.uri);
+      scheduleDiagnosticsRefresh("immediate");
+    }),
+    vscode.workspace.onDidSaveTextDocument((doc) => {
+      workspaceFileContents.set(doc.fileName, doc.getText());
+      scheduleDiagnosticsRefresh("immediate");
+    }),
     vscode.languages.registerCompletionItemProvider(
       { pattern: "**/.env" },
       envCompletionProvider,
       ..."ABCDEFGHIJKLMNOPQRSTUVWXYZ_".split(""),
     ),
     collection,
+    new vscode.Disposable(() => {
+      if (diagnosticsRefreshTimer) {
+        clearTimeout(diagnosticsRefreshTimer);
+      }
+      if (autoSuggestTimer) {
+        clearTimeout(autoSuggestTimer);
+      }
+    }),
   );
 }
 

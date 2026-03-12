@@ -25,7 +25,11 @@ export function createEnvCompletionProvider(
 
       const line = document.lineAt(position.line);
       const linePrefix = line.text.slice(0, position.character);
-      const missingKeys = getMissingEnvKeysForEnvText(document.getText(), workspaceFiles);
+      const missingKeys = getMissingEnvKeysForEnvText(
+        document.getText(),
+        workspaceFiles,
+        document.fileName,
+      );
 
       if (missingKeys.length === 0) {
         return [];

@@ -20,6 +20,7 @@ When editing `.env`, the extension suggests keys that are used in source files b
 - Suggests all missing keys automatically on empty lines
 - Includes `Add all missing environment variables` for one-click bulk insert
 - Inserts keys as `KEY=`
+- In monorepos, suggestions are scoped to source files that resolve to the same nearest `.env`
 
 ### Missing variables in code
 
@@ -43,6 +44,8 @@ Environment variable "DB_HOST" is defined in .env but never used
 
 ### Monorepo support
 The extension automatically finds the nearest `.env` file by walking up the directory tree from your source file. This means you can have multiple `.env` files in a monorepo and the extension will always compare against the correct one.
+
+Autocomplete follows the same nearest-`.env` resolution, so a `.env` in one package does not receive suggestions derived from another package.
 
 ```
 apps/

@@ -3,7 +3,7 @@ import { isSourceFilePath } from "./core/sourceFileMatcher";
 import { parseEnvKeys } from "./core/envParser";
 import { scanForEnvUsages } from "./core/scanner";
 import { findNearestEnv } from "./core/fileWalker";
-import { ENV_FILE_NAME } from "./core/constants";
+import { DEFAULT_EXCLUDE_KEY_SET, ENV_FILE_NAME } from "./core/constants";
 
 /**
  * The single DiagnosticCollection that owns all our warnings.
@@ -25,8 +25,6 @@ export function refreshAllDiagnostics(
   collection: vscode.DiagnosticCollection,
   workspaceFiles: Map<string, string>,
 ): void {
-  collection.clear();
-
   const openDocs = vscode.workspace.textDocuments;
 
   checkMissingKeys(collection, openDocs);
@@ -55,6 +53,10 @@ function checkMissingKeys(
     const usages = scanForEnvUsages(doc.getText());
 
     for (const usage of usages) {
+      if (DEFAULT_EXCLUDE_KEY_SET.has(usage.key)) {
+        continue;
+      }
+
       if (!envKeys.has(usage.key)) {
         const pos = doc.positionAt(usage.index);
         const endPos = doc.positionAt(usage.index + usage.matchLength);
@@ -93,7 +95,11 @@ function checkUnusedKeys(
     if (!isSourceFilePath(filePath)) {
       continue;
     }
-    scanForEnvUsages(content).forEach((u) => allUsedKeys.add(u.key));
+    scanForEnvUsages(content).forEach((u) => {
+      if (!DEFAULT_EXCLUDE_KEY_SET.has(u.key)) {
+        allUsedKeys.add(u.key);
+      }
+    });
   }
 
   for (const doc of openDocs) {
@@ -116,6 +122,10 @@ function checkUnusedKeys(
       }
 
       const key = trimmed.substring(0, eqIndex).trim();
+
+      if (DEFAULT_EXCLUDE_KEY_SET.has(key)) {
+        return;
+      }
 
       if (key && !allUsedKeys.has(key)) {
         const range = new vscode.Range(lineIndex, 0, lineIndex, key.length);

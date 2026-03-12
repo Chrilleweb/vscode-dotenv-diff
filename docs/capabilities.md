@@ -4,9 +4,25 @@ This document describes everything `vscode-dotenv-diff` can do, and how it behav
 
 ---
 
+Ignores runtime/build-tool keys by default:
+
+```text
+PWD
+NODE_ENV
+VITE_MODE
+MODE
+BASE_URL
+PROD
+DEV
+SSR
+DOTENV_KEY
+```
+
 ## 1. Autocomplete for missing keys in `.env`
 
 When editing a `.env` file, the extension suggests environment variable keys that are used in source files but missing from the current `.env` document.
+
+In monorepos, suggestions are scoped to source files that resolve to the same nearest `.env` as the file you are editing.
 
 Suggestions appear on empty lines.
 
@@ -92,6 +108,8 @@ apps/
 ```
 
 Each source file always resolves to its nearest `.env` — independently of other files.
+
+This nearest-`.env` behavior is used by diagnostics and autocomplete suggestions.
 
 ---
 
