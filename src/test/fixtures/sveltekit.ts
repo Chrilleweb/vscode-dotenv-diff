@@ -34,3 +34,18 @@ export const envWithoutImport = `
   const env = {};
   const url = env.PUBLIC_API_URL;
 `;
+
+export const dynamicDestructuringSingleKey = `
+  import { env } from '$env/dynamic/private';
+  const { SECRET_KEY } = env;
+`;
+
+export const dynamicDestructuringAliasAndFallback = `
+  import { env } from '$env/dynamic/public';
+  const { PUBLIC_API_URL: apiUrl, PUBLIC_BASE_URL = "http://localhost" } = env;
+`;
+
+export const dynamicDestructuringWithoutImport = `
+  const env = {};
+  const { SECRET_KEY } = env;
+`;

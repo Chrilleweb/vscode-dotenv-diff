@@ -5,6 +5,7 @@ import {
   IMPORT_META_ENV_PATTERN,
   SVELTEKIT_ENV_IMPORT_PATTERN,
   SVELTEKIT_ENV_PATTERN,
+  SVELTEKIT_ENV_DESTRUCTURING_PATTERN,
   SVELTEKIT_STATIC_ENV_IMPORT_PATTERN,
 } from "./constants";
 
@@ -70,6 +71,10 @@ export function scanForEnvUsages(sourceText: string): EnvUsage[] {
   }
 
   usages.push(...scanProcessEnvDestructuringUsages(sourceText));
+
+  if (SVELTEKIT_ENV_IMPORT_PATTERN.test(sourceText)) {
+    usages.push(...scanSvelteKitEnvDestructuringUsages(sourceText));
+  }
 
   return usages;
 }
@@ -192,5 +197,41 @@ function scanProcessEnvDestructuringUsages(sourceText: string): EnvUsage[] {
   }
 
   PROCESS_ENV_DESTRUCTURING_PATTERN.lastIndex = 0;
+  return usages;
+}
+
+/**
+ * Scans object destructuring assignments from SvelteKit's env object and extracts env keys.
+ * Only called when a SvelteKit $env import is detected in the file.
+ * Supports direct keys, aliases, and default values.
+ * @param sourceText The full source code text to scan
+ * @return A list of environment variable usages found in destructuring patterns
+ */
+function scanSvelteKitEnvDestructuringUsages(sourceText: string): EnvUsage[] {
+  const usages: EnvUsage[] = [];
+  let match: RegExpExecArray | null;
+
+  while (
+    (match = SVELTEKIT_ENV_DESTRUCTURING_PATTERN.exec(sourceText)) !== null
+  ) {
+    const objectPattern = match[1] ?? "";
+    const objectStartInMatch = match[0].indexOf("{") + 1;
+    const objectStartInSource = match.index + objectStartInMatch;
+    const keyPattern = /(?<!\.)\b([A-Z_][A-Z0-9_]*)\b(?=\s*(?::|=|,|$))/g;
+    let keyMatch: RegExpExecArray | null;
+
+    while ((keyMatch = keyPattern.exec(objectPattern)) !== null) {
+      const key = keyMatch[1];
+      const index = objectStartInSource + keyMatch.index;
+
+      if (isInComment(sourceText, index)) {
+        continue;
+      }
+
+      usages.push({ key, index, matchLength: key.length });
+    }
+  }
+
+  SVELTEKIT_ENV_DESTRUCTURING_PATTERN.lastIndex = 0;
   return usages;
 }

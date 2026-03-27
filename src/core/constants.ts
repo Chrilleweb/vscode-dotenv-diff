@@ -100,6 +100,18 @@ export const SVELTEKIT_ENV_PATTERN = /(?<![.\w])env\.([A-Z_][A-Z0-9_]*)/g;
 export const SVELTEKIT_ENV_IMPORT_PATTERN = /from\s+['"](\$env\/)/;
 
 /**
+ * Matches object destructuring assignments from SvelteKit's env object.
+ * Captures the full object pattern between braces for further parsing.
+ * Only used when a SvelteKit $env import is detected in the file.
+ *
+ * Examples:
+ *   const { MY_KEY } = env
+ *   const { MY_KEY: alias, OTHER_KEY = "fallback" } = env
+ */
+export const SVELTEKIT_ENV_DESTRUCTURING_PATTERN =
+  /\{([^}]*)\}\s*=\s*\benv\b/g;
+
+/**
  * Matches SvelteKit static env named imports.
  * Used to map imported identifiers to actual env keys.
  *
