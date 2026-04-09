@@ -16,6 +16,20 @@ PROD
 DEV
 SSR
 DOTENV_KEY
+CI
+GITHUB_ACTIONS
+INIT_CWD
+TZ
+PORT
+PATH
+HOME
+USER
+SHELL
+LANG
+TMP
+TEMP
+TMPDIR
+NODE_PATH
 ```
 
 ## 1. Autocomplete for missing keys in `.env`
@@ -148,7 +162,7 @@ MY_KEY
 
 Only `UPPER_CASE` key names are matched, which is the standard convention for environment variables.
 
-Scanned file types: .ts, .js, .mjs, .cjs, .mts, .cts, .svelte
+Scanned file types: .ts, .tsx, .js, .jsx, .mjs, .cjs, .mts, .cts, .svelte
 
 ---
 

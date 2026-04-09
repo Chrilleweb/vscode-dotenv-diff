@@ -4,7 +4,9 @@ import { isSourceFilePath } from "../../core/sourceFileMatcher";
 suite("sourceFileMatcher", () => {
   test("matches supported source file extensions", () => {
     assert.strictEqual(isSourceFilePath("src/app.ts"), true);
+    assert.strictEqual(isSourceFilePath("src/app.tsx"), true);
     assert.strictEqual(isSourceFilePath("src/app.js"), true);
+    assert.strictEqual(isSourceFilePath("src/app.jsx"), true);
     assert.strictEqual(isSourceFilePath("src/app.mjs"), true);
     assert.strictEqual(isSourceFilePath("src/app.cjs"), true);
     assert.strictEqual(isSourceFilePath("src/app.mts"), true);
@@ -13,10 +15,9 @@ suite("sourceFileMatcher", () => {
   });
 
   test("does not match non-source extensions", () => {
-    assert.strictEqual(isSourceFilePath("src/app.tsx"), false);
-    assert.strictEqual(isSourceFilePath("src/app.jsx"), false);
     assert.strictEqual(isSourceFilePath("src/app.json"), false);
     assert.strictEqual(isSourceFilePath("src/app.env"), false);
+    assert.strictEqual(isSourceFilePath("src/app.md"), false);
   });
 
   test("excludes .test.ts and .test.js files", () => {
