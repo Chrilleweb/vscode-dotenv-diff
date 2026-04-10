@@ -108,6 +108,14 @@ suite("core integration", () => {
     writeFile(path.join("src", "feature.ts"), "const x = process.env.FEATURE_FLAG;\n");
     writeFile(path.join("src", "build.mjs"), "const id = import.meta.env.BUILD_ID;\n");
     writeFile(
+      path.join("src", "auth.tsx"),
+      "const trustedIssuers = String(process.env.KEYCLOAK_TRUSTED_ISSUERS)?.split(',') ?? [];\n",
+    );
+    writeFile(
+      path.join("src", "client.jsx"),
+      "const clientId = process.env.REACT_APP_CLIENT_ID;\n",
+    );
+    writeFile(
       path.join("src", "feature.test.ts"),
       "const t = process.env.SHOULD_NOT_BE_INCLUDED;\n",
     );
@@ -118,6 +126,8 @@ suite("core integration", () => {
 
     assert.strictEqual(usedKeys.has("FEATURE_FLAG"), true);
     assert.strictEqual(usedKeys.has("BUILD_ID"), true);
+    assert.strictEqual(usedKeys.has("KEYCLOAK_TRUSTED_ISSUERS"), true);
+    assert.strictEqual(usedKeys.has("REACT_APP_CLIENT_ID"), true);
     assert.strictEqual(usedKeys.has("SHOULD_NOT_BE_INCLUDED"), false);
     assert.strictEqual(usedKeys.has("README_KEY"), false);
   });

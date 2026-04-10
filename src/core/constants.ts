@@ -18,6 +18,20 @@ export const DEFAULT_EXCLUDE_KEYS = [
   "DEV",
   "SSR",
   "DOTENV_KEY",
+  'CI',
+  'GITHUB_ACTIONS',
+  'INIT_CWD',
+  'TZ',
+  'PORT',
+  'PATH',
+  'HOME',
+  'USER',
+  'SHELL',
+  'LANG',
+  'TMP',
+  'TEMP',
+  'TMPDIR',
+  'NODE_PATH',
 ] as const;
 
 /**
@@ -30,7 +44,7 @@ export const DEFAULT_EXCLUDE_KEY_SET = new Set<string>(DEFAULT_EXCLUDE_KEYS);
  * This is the single source of truth – SOURCE_FILE_GLOB and EXCLUDE_FILE_GLOB
  * are derived from this list, as is isSourceFilePath() in sourceFileMatcher.ts.
  */
-export const SOURCE_FILE_EXTENSIONS = "ts|js|mjs|cjs|mts|cts|svelte";
+export const SOURCE_FILE_EXTENSIONS = "ts|tsx|js|jsx|mjs|cjs|mts|cts|svelte";
 
 /**
  * Glob pattern for finding source files in the workspace.
