@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - "You miss 100 percent of the chances you don't take. — Wayne Gretzky" — Michael Scott
 
+## [0.6.4](https://github.com/Chrilleweb/vscode-dotenv-diff/compare/v0.6.3...v0.6.4) (2026-04-13)
+
+### 🐛 Bug Fixes
+
+* added support for jsx and tsx ([#29](https://github.com/Chrilleweb/vscode-dotenv-diff/issues/29)) ([7311e46](https://github.com/Chrilleweb/vscode-dotenv-diff/commit/7311e46067e2f58ab82c0348780cd44deeecf4c5))
+
 ## [0.6.3](https://github.com/Chrilleweb/vscode-dotenv-diff/compare/v0.6.2...v0.6.3) (2026-03-27)
 
 ### 🐛 Bug Fixes
