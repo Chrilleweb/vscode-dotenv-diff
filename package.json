@@ -2,7 +2,7 @@
   "name": "dotenv-diff",
   "displayName": "Dotenv-diff",
   "description": "Catch missing and unused environment variables against your .env file",
-  "version": "0.6.5",
+  "version": "0.6.6",
   "engines": {
     "vscode": "^1.110.0"
   },
