@@ -114,6 +114,20 @@ export const SVELTEKIT_ENV_PATTERN = /(?<![.\w])env\.([A-Z_][A-Z0-9_]*)/g;
 export const SVELTEKIT_ENV_IMPORT_PATTERN = /from\s+['"](\$env\/)/;
 
 /**
+ * Matches SvelteKit env imports that use `env` as a binding name (direct or aliased).
+ * Handles both dynamic and static $env imports where `env` is used as an object.
+ * Captures the alias name if present (group 1), otherwise the local name defaults to 'env'.
+ *
+ * Examples:
+ *   import { env } from '$env/dynamic/private'                → group 1: undefined
+ *   import { env as privateEnv } from '$env/dynamic/private'  → group 1: 'privateEnv'
+ *   import { env as publicEnv } from "$env/dynamic/public"    → group 1: 'publicEnv'
+ *   import { env } from '$env/static/public'                  → group 1: undefined
+ */
+export const SVELTEKIT_DYNAMIC_ENV_IMPORT_PATTERN =
+  /import\s*\{[^}]*\benv(?:\s+as\s+([A-Za-z_$][\w$]*))?[^}]*\}\s*from\s*['"]\$env\/(?:dynamic|static)\/(?:private|public)['"]/g;
+
+/**
  * Matches object destructuring assignments from SvelteKit's env object.
  * Captures the full object pattern between braces for further parsing.
  * Only used when a SvelteKit $env import is detected in the file.
@@ -122,8 +136,7 @@ export const SVELTEKIT_ENV_IMPORT_PATTERN = /from\s+['"](\$env\/)/;
  *   const { MY_KEY } = env
  *   const { MY_KEY: alias, OTHER_KEY = "fallback" } = env
  */
-export const SVELTEKIT_ENV_DESTRUCTURING_PATTERN =
-  /\{([^}]*)\}\s*=\s*\benv\b/g;
+export const SVELTEKIT_ENV_DESTRUCTURING_PATTERN = /\{([^}]*)\}\s*=\s*\benv\b/g;
 
 /**
  * Matches SvelteKit static env named imports.

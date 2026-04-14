@@ -49,3 +49,25 @@ export const dynamicDestructuringWithoutImport = `
   const env = {};
   const { SECRET_KEY } = env;
 `;
+
+export const dynamicAliasedPrivateImport = `
+  import { env as privateEnv } from '$env/dynamic/private';
+  const key = privateEnv.SUPABASE_SERVICE_ROLE_KEY;
+`;
+
+export const dynamicAliasedPublicImport = `
+  import { env as publicEnv } from '$env/dynamic/public';
+  const url = publicEnv.PUBLIC_API_URL;
+`;
+
+export const dynamicMultipleAliasedImports = `
+  import { env as publicEnv } from '$env/dynamic/public';
+  import { env as privateEnv } from '$env/dynamic/private';
+  const url = publicEnv.PUBLIC_SUPABASE_URL;
+  const key = privateEnv.SUPABASE_SERVICE_ROLE_KEY;
+`;
+
+export const dynamicAliasedDestructuring = `
+  import { env as privateEnv } from '$env/dynamic/private';
+  const { SECRET_KEY } = privateEnv;
+`;
