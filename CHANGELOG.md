@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - "You miss 100 percent of the chances you don't take. — Wayne Gretzky" — Michael Scott
 
+## [0.6.5](https://github.com/Chrilleweb/vscode-dotenv-diff/compare/v0.6.4...v0.6.5) (2026-04-14)
+
+### 🐛 Bug Fixes
+
+* dynamic sveltekit alias ([#33](https://github.com/Chrilleweb/vscode-dotenv-diff/issues/33)) ([cd2e307](https://github.com/Chrilleweb/vscode-dotenv-diff/commit/cd2e3071200730ba1b9c516c706bf4037997afd0))
+
 ## [0.6.4](https://github.com/Chrilleweb/vscode-dotenv-diff/compare/v0.6.3...v0.6.4) (2026-04-13)
 
 ### 🐛 Bug Fixes
