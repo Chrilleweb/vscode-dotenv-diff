@@ -174,7 +174,14 @@ export async function activate(
       triggerEnvSuggestionsIfNeeded(event.textEditor);
     }),
     vscode.workspace.onDidCloseTextDocument((doc) => {
-      workspaceFileContents.delete(doc.fileName);
+      // Re-read from disk so closed files still contribute to unused-key detection.
+      // If the file was deleted, remove it from the map.
+      try {
+        const content = fs.readFileSync(doc.fileName, "utf8");
+        workspaceFileContents.set(doc.fileName, content);
+      } catch {
+        workspaceFileContents.delete(doc.fileName);
+      }
       collection.delete(doc.uri);
       scheduleDiagnosticsRefresh("immediate");
     }),
