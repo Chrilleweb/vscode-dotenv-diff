@@ -11,6 +11,10 @@ import {
   dynamicDestructuringSingleKey,
   dynamicDestructuringAliasAndFallback,
   dynamicDestructuringWithoutImport,
+  dynamicAliasedPrivateImport,
+  dynamicAliasedPublicImport,
+  dynamicMultipleAliasedImports,
+  dynamicAliasedDestructuring,
 } from "../../fixtures/sveltekit";
 
 suite("scanner (sveltekit)", () => {
@@ -69,5 +73,32 @@ suite("scanner (sveltekit)", () => {
   test("does not detect env destructuring without SvelteKit import", () => {
     const usages = scanForEnvUsages(dynamicDestructuringWithoutImport);
     assert.strictEqual(usages.length, 0);
+  });
+
+  test("finds aliased private env import usage (privateEnv.KEY)", () => {
+    const usages = scanForEnvUsages(dynamicAliasedPrivateImport);
+    assert.strictEqual(usages.length, 1);
+    assert.strictEqual(usages[0].key, "SUPABASE_SERVICE_ROLE_KEY");
+  });
+
+  test("finds aliased public env import usage (publicEnv.KEY)", () => {
+    const usages = scanForEnvUsages(dynamicAliasedPublicImport);
+    assert.strictEqual(usages.length, 1);
+    assert.strictEqual(usages[0].key, "PUBLIC_API_URL");
+  });
+
+  test("finds usages from multiple aliased imports", () => {
+    const usages = scanForEnvUsages(dynamicMultipleAliasedImports);
+    const keys = usages.map((u) => u.key).sort();
+    assert.deepStrictEqual(keys, [
+      "PUBLIC_SUPABASE_URL",
+      "SUPABASE_SERVICE_ROLE_KEY",
+    ]);
+  });
+
+  test("finds key in destructuring from aliased env (privateEnv)", () => {
+    const usages = scanForEnvUsages(dynamicAliasedDestructuring);
+    assert.strictEqual(usages.length, 1);
+    assert.strictEqual(usages[0].key, "SECRET_KEY");
   });
 });

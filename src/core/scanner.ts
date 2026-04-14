@@ -3,10 +3,10 @@ import {
   PROCESS_ENV_PATTERN,
   PROCESS_ENV_DESTRUCTURING_PATTERN,
   IMPORT_META_ENV_PATTERN,
-  SVELTEKIT_ENV_IMPORT_PATTERN,
   SVELTEKIT_ENV_PATTERN,
   SVELTEKIT_ENV_DESTRUCTURING_PATTERN,
   SVELTEKIT_STATIC_ENV_IMPORT_PATTERN,
+  SVELTEKIT_DYNAMIC_ENV_IMPORT_PATTERN,
 } from "./constants";
 
 /**
@@ -44,9 +44,18 @@ export function scanForEnvUsages(sourceText: string): EnvUsage[] {
   // Build patterns array fresh on each call
   const patterns = [PROCESS_ENV_PATTERN, IMPORT_META_ENV_PATTERN];
 
-  // Only scan for env.KEY if file imports from SvelteKit's $env module
-  if (SVELTEKIT_ENV_IMPORT_PATTERN.test(sourceText)) {
-    patterns.push(SVELTEKIT_ENV_PATTERN);
+  // For each dynamic SvelteKit env import, add a pattern matching the local binding name.
+  // Handles both direct usage (env.KEY) and aliased usage (privateEnv.KEY).
+  const dynamicEnvNames = collectSvelteKitDynamicEnvNames(sourceText);
+  for (const name of dynamicEnvNames) {
+    const pattern =
+      name === "env"
+        ? SVELTEKIT_ENV_PATTERN
+        : new RegExp(
+            `(?<![.\\w])${escapeRegExp(name)}\.([A-Z_][A-Z0-9_]*)`,
+            "g",
+          );
+    patterns.push(pattern);
   }
 
   for (const pattern of patterns) {
@@ -72,8 +81,8 @@ export function scanForEnvUsages(sourceText: string): EnvUsage[] {
 
   usages.push(...scanProcessEnvDestructuringUsages(sourceText));
 
-  if (SVELTEKIT_ENV_IMPORT_PATTERN.test(sourceText)) {
-    usages.push(...scanSvelteKitEnvDestructuringUsages(sourceText));
+  for (const name of dynamicEnvNames) {
+    usages.push(...scanSvelteKitEnvDestructuringUsages(sourceText, name));
   }
 
   return usages;
@@ -201,19 +210,46 @@ function scanProcessEnvDestructuringUsages(sourceText: string): EnvUsage[] {
 }
 
 /**
+ * Collects local binding names for all dynamic SvelteKit env imports in the source.
+ * Handles both direct (env) and aliased (env as alias) imports.
+ * @param sourceText The full source code text to scan
+ * @return An array of local names (e.g. ['env', 'privateEnv', 'publicEnv'])
+ */
+function collectSvelteKitDynamicEnvNames(sourceText: string): string[] {
+  const names: string[] = [];
+  let match: RegExpExecArray | null;
+
+  while (
+    (match = SVELTEKIT_DYNAMIC_ENV_IMPORT_PATTERN.exec(sourceText)) !== null
+  ) {
+    names.push(match[1] ?? "env");
+  }
+
+  SVELTEKIT_DYNAMIC_ENV_IMPORT_PATTERN.lastIndex = 0;
+  return names;
+}
+
+/**
  * Scans object destructuring assignments from SvelteKit's env object and extracts env keys.
  * Only called when a SvelteKit $env import is detected in the file.
  * Supports direct keys, aliases, and default values.
  * @param sourceText The full source code text to scan
+ * @param envName The local binding name of the env object (defaults to 'env')
  * @return A list of environment variable usages found in destructuring patterns
  */
-function scanSvelteKitEnvDestructuringUsages(sourceText: string): EnvUsage[] {
+function scanSvelteKitEnvDestructuringUsages(
+  sourceText: string,
+  envName = "env",
+): EnvUsage[] {
   const usages: EnvUsage[] = [];
   let match: RegExpExecArray | null;
 
-  while (
-    (match = SVELTEKIT_ENV_DESTRUCTURING_PATTERN.exec(sourceText)) !== null
-  ) {
+  const pattern =
+    envName === "env"
+      ? SVELTEKIT_ENV_DESTRUCTURING_PATTERN
+      : new RegExp(`\\{([^}]*)\\}\\s*=\\s*\\b${escapeRegExp(envName)}\\b`, "g");
+
+  while ((match = pattern.exec(sourceText)) !== null) {
     const objectPattern = match[1] ?? "";
     const objectStartInMatch = match[0].indexOf("{") + 1;
     const objectStartInSource = match.index + objectStartInMatch;
@@ -232,6 +268,6 @@ function scanSvelteKitEnvDestructuringUsages(sourceText: string): EnvUsage[] {
     }
   }
 
-  SVELTEKIT_ENV_DESTRUCTURING_PATTERN.lastIndex = 0;
+  pattern.lastIndex = 0;
   return usages;
 }
