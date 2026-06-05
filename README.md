@@ -1,10 +1,6 @@
 # [VS Code Dotenv-diff](https://marketplace.visualstudio.com/items?itemName=Chrilleweb.dotenv-diff)
 > Catch missing and unused environment variables before they catch you.
 
-[![VS Code Marketplace](https://vsmarketplacebadges.dev/version/Chrilleweb.dotenv-diff.svg)](https://marketplace.visualstudio.com/items?itemName=Chrilleweb.dotenv-diff)
-[![Installs](https://vsmarketplacebadges.dev/installs/Chrilleweb.dotenv-diff.svg)](https://marketplace.visualstudio.com/items?itemName=Chrilleweb.dotenv-diff)
-[![Rating](https://vsmarketplacebadges.dev/rating/Chrilleweb.dotenv-diff.svg)](https://marketplace.visualstudio.com/items?itemName=Chrilleweb.dotenv-diff)
-
 `vscode-dotenv-diff` is a lightweight VS Code extension that scans your codebase for environment variable references and warns you when source files reference variables that aren't defined in your `.env` file — and when your `.env` file has variables that are never used in your codebase. The autocomplete suggestions for missing keys in `.env` are derived directly from these scanned references.
 
 ---
