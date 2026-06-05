@@ -36,7 +36,7 @@ export function refreshAllDiagnostics(
  * that are not defined in the nearest .env file.
  * @param collection The DiagnosticCollection to update with new diagnostics
  * @param openDocs The currently open text documents in the editor
- * @return void 
+ * @return void
  */
 function checkMissingKeys(
   collection: vscode.DiagnosticCollection,
@@ -47,7 +47,19 @@ function checkMissingKeys(
       continue;
     }
 
-    const envPath = findNearestEnv(doc.fileName);
+    const envPath = findNearestEnv(
+      doc.fileName,
+      vscode.workspace.workspaceFolders?.[0]?.uri.fsPath,
+    );
+
+    /**
+     * If no .env file is found, we could choose to warn about all process.env usages,
+     * but that might be too noisy. For now, we simply skip diagnostics in this case.
+     */
+    if (!envPath) {
+      continue;
+    }
+
     const envKeys = envPath ? parseEnvKeys(envPath) : new Set<string>();
     const diagnostics: vscode.Diagnostic[] = [];
     const usages = scanForEnvUsages(doc.getText());

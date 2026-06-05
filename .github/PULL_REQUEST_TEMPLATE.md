@@ -6,6 +6,7 @@
 
 - [ ] Changes are small, focused, and easy to review
 - [ ] Link to related issues (if applicable)
+- [ ] Commit messages follow **Conventional Commits** (e.g. `feat:`, `fix:`, `docs:`, `chore:`)
 - [ ] The existing code style and project structure are followed
 
 ### Tests
