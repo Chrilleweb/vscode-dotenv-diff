@@ -4,13 +4,17 @@
 
 ### Please don't delete this checklist! Before submitting the PR, please make sure you do the following:
 
-- [ ] The changes are small, focused, and easy to review
-- [ ] Commit messages follow **Conventional Commits** (e.g. `feat:`, `fix:`, `docs:`, `chore:`)
+- [ ] Changes are small, focused, and easy to review
 - [ ] Link to related issues (if applicable)
+- [ ] The existing code style and project structure are followed
 
 ### Tests
 
 - [ ] Relevant tests have been added or updated
+
+### Documentation
+
+- [ ] Documentation has been updated if necessary (e.g., README, docs folder)
 
 ---
 

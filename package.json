@@ -23,6 +23,8 @@
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile && npm run lint",
     "lint": "eslint src",
+    "prepare": "husky",
+    "lint-staged": "lint-staged",
     "test": "vscode-test",
     "release": "release-it",
     "release:dry": "release-it --dry-run"
@@ -38,16 +40,28 @@
     "url": "https://github.com/Chrilleweb/vscode-dotenv-diff/issues"
   },
   "icon": "images/logo.png",
+  "lint-staged": {
+    "*.{ts,js}": [
+      "prettier --write",
+      "eslint --fix --max-warnings=0"
+    ],
+    "*.{json,md,yml}": [
+      "prettier --write"
+    ]
+  },
   "devDependencies": {
-    "@release-it/conventional-changelog": "^10.0.6",
+    "@release-it/conventional-changelog": "^11.0.1",
     "@types/mocha": "^10.0.10",
-    "@types/node": "~25.5.0",
-    "@types/vscode": "^1.110.0",
+    "@types/node": "~25.9.1",
+    "@types/vscode": "^1.120.0",
     "@vscode/test-cli": "^0.0.12",
     "@vscode/test-electron": "^2.5.2",
-    "eslint": "^10.1.0",
-    "release-it": "^19.2.4",
-    "typescript": "^5.9.3",
-    "typescript-eslint": "^8.57.1"
+    "eslint": "^10.4.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.0.7",
+    "prettier": "^3.8.3",
+    "release-it": "^20.2.0",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.60.1"
   }
 }
