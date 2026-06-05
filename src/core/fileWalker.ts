@@ -10,7 +10,7 @@ import { ENV_FILE_NAME } from "./constants";
  *   → checks /apps/frontend/src/.env
  *   → checks /apps/frontend/.env  ✓ found
  * @param filePath The file path to start searching from
- * @return The full path to the nearest .env file, or null if none found
+ * @return The full path to the nearest .env file, or null if none found up to the workspace root
  */
 export function findNearestEnv(
   filePath: string,
@@ -26,7 +26,7 @@ export function findNearestEnv(
       return candidate;
     }
 
-    // Stop hvis vi er nået til workspace-roden
+    // Stop if we've reached the workspace root or filesystem root
     if (workspaceRoot && dir === workspaceRoot) {
       return null;
     }
