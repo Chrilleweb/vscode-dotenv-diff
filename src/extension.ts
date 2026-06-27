@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import * as fs from "fs";
 import { SOURCE_FILE_GLOB, EXCLUDE_FILE_GLOB } from "./core/constants";
+import { isInExcludedDirectory } from "./core/sourceFileMatcher";
 import {
   createEnvCompletionProvider,
   shouldAutoTriggerMissingEnvSuggestions,
@@ -148,6 +149,10 @@ export async function activate(
 
   context.subscriptions.push(
     vscode.workspace.onDidOpenTextDocument((doc) => {
+      if (isInExcludedDirectory(doc.fileName)) {
+        return;
+      }
+
       workspaceFileContents.set(doc.fileName, doc.getText());
       scheduleDiagnosticsRefresh("immediate");
 
@@ -157,6 +162,10 @@ export async function activate(
     }),
     vscode.workspace.onDidChangeTextDocument((e) => {
       if (e.contentChanges.length === 0) {
+        return;
+      }
+
+      if (isInExcludedDirectory(e.document.fileName)) {
         return;
       }
 
@@ -174,6 +183,11 @@ export async function activate(
       triggerEnvSuggestionsIfNeeded(event.textEditor);
     }),
     vscode.workspace.onDidCloseTextDocument((doc) => {
+      if (isInExcludedDirectory(doc.fileName)) {
+        collection.delete(doc.uri);
+        return;
+      }
+
       // Re-read from disk so closed files still contribute to unused-key detection.
       // If the file was deleted, remove it from the map.
       try {
@@ -186,6 +200,10 @@ export async function activate(
       scheduleDiagnosticsRefresh("immediate");
     }),
     vscode.workspace.onDidSaveTextDocument((doc) => {
+      if (isInExcludedDirectory(doc.fileName)) {
+        return;
+      }
+
       workspaceFileContents.set(doc.fileName, doc.getText());
       scheduleDiagnosticsRefresh("immediate");
     }),
