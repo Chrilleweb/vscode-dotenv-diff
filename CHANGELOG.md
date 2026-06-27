@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - "You miss 100 percent of the chances you don't take. — Wayne Gretzky" — Michael Scott
 
+## [0.6.8](https://github.com/Chrilleweb/vscode-dotenv-diff/compare/v0.6.7...v0.6.8) (2026-06-27)
+
+### 🐛 Bug Fixes
+
+* false .env suggestions ([#45](https://github.com/Chrilleweb/vscode-dotenv-diff/issues/45)) ([de27a21](https://github.com/Chrilleweb/vscode-dotenv-diff/commit/de27a21418849d36132c0e2ec68803afbc2125cd))
+
 ## [0.6.7](https://github.com/Chrilleweb/vscode-dotenv-diff/compare/v0.6.6...v0.6.7) (2026-06-05)
 
 ### 🐛 Bug Fixes
