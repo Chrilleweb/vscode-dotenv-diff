@@ -10,9 +10,12 @@ import { ENV_FILE_NAME } from "./constants";
  *   → checks /apps/frontend/src/.env
  *   → checks /apps/frontend/.env  ✓ found
  * @param filePath The file path to start searching from
- * @return The full path to the nearest .env file, or null if none found 
+ * @return The full path to the nearest .env file, or null if none found up to the workspace root
  */
-export function findNearestEnv(filePath: string): string | null {
+export function findNearestEnv(
+  filePath: string,
+  workspaceRoot?: string,
+): string | null {
   let dir = path.dirname(filePath);
 
   // Walk up until we hit the filesystem root
@@ -21,6 +24,11 @@ export function findNearestEnv(filePath: string): string | null {
 
     if (fs.existsSync(candidate)) {
       return candidate;
+    }
+
+    // Stop if we've reached the workspace root or filesystem root
+    if (workspaceRoot && dir === workspaceRoot) {
+      return null;
     }
 
     const parent = path.dirname(dir);

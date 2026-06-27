@@ -2,7 +2,7 @@
   "name": "dotenv-diff",
   "displayName": "Dotenv-diff",
   "description": "Catch missing and unused environment variables against your .env file",
-  "version": "0.6.6",
+  "version": "0.6.7",
   "engines": {
     "vscode": "^1.110.0"
   },
@@ -23,6 +23,8 @@
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile && npm run lint",
     "lint": "eslint src",
+    "prepare": "husky",
+    "lint-staged": "lint-staged",
     "test": "vscode-test",
     "release": "release-it",
     "release:dry": "release-it --dry-run"
@@ -38,15 +40,27 @@
     "url": "https://github.com/Chrilleweb/vscode-dotenv-diff/issues"
   },
   "icon": "images/logo.png",
+  "lint-staged": {
+    "*.{ts,js}": [
+      "prettier --write",
+      "eslint --fix --max-warnings=0"
+    ],
+    "*.{json,yml}": [
+      "prettier --write"
+    ]
+  },
   "devDependencies": {
     "@release-it/conventional-changelog": "^11.0.1",
     "@types/mocha": "^10.0.10",
-    "@types/node": "~26.0.1",
+    "@types/node": "~26.0.0",
     "@types/vscode": "^1.110.0",
     "@vscode/test-cli": "^0.0.12",
     "@vscode/test-electron": "^2.5.2",
-    "eslint": "^10.6.0",
-    "release-it": "^20.2.1",
+    "eslint": "^10.5.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.0.8",
+    "prettier": "^3.8.4",
+    "release-it": "^20.2.0",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.62.0"
   }

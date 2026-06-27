@@ -60,23 +60,29 @@ If multiple keys are missing, the suggestion list also includes `Add all missing
 
 When a source file references an environment variable and that key is not present in the nearest `.env` file, the extension underlines the reference with a warning.
 
+> **No `.env` file? No warnings.**
+> If no `.env` file is found between the source file and the workspace root, the extension stays silent.
+
 ![Not Defined](./screenshots/not-defined.png)
 
 **Example:**
 
 `apps/frontend/.env`
+
 ```
 DB_HOST=localhost
 DB_PORT=5432
 ```
 
 `apps/frontend/src/app.ts`
+
 ```typescript
-const host = process.env.DB_HOST;     // defined in .env
-const secret = process.env.SECRET;    // not defined in .env
+const host = process.env.DB_HOST; // defined in .env
+const secret = process.env.SECRET; // not defined in .env
 ```
 
 **Warning message:**
+
 ```
 Environment variable "SECRET" is not defined in .env
 ```
@@ -92,11 +98,13 @@ When a key is defined in a `.env` file but never referenced anywhere in the work
 **Example:**
 
 `.env`
+
 ```
 DB_HOST=
 ```
 
 **Warning message:**
+
 ```
 Environment variable "DB_HOST" is defined in .env but never used
 ```
@@ -105,9 +113,10 @@ Environment variable "DB_HOST" is defined in .env but never used
 
 ## 4. Monorepo support
 
-The extension automatically finds the nearest `.env` file by walking up the directory tree from the source file. No configuration required.
+The extension automatically finds the nearest `.env` file by walking up the directory tree from the source file, stopping at the workspace root. No configuration required.
 
 **Example structure:**
+
 ```
 apps/
 ├── frontend/
@@ -133,43 +142,43 @@ The extension recognises the following patterns:
 
 ```typescript
 // Node.js – dot and bracket notation
-process.env.MY_KEY
-process.env["MY_KEY"]
-process.env['MY_KEY']
+process.env.MY_KEY;
+process.env["MY_KEY"];
+process.env['MY_KEY'];
 
 // Node.js – destructuring
-const { MY_KEY } = process.env
-const { MY_KEY: alias, OTHER_KEY = "fallback" } = process.env
+const { MY_KEY } = process.env;
+const { MY_KEY: alias, OTHER_KEY = "fallback" } = process.env;
 
 // Vite / import.meta
-import.meta.env.MY_KEY
-import.meta.env["MY_KEY"]
-import.meta.env['MY_KEY']
+import.meta.env.MY_KEY;
+import.meta.env["MY_KEY"];
+import.meta.env['MY_KEY'];
 
 // SvelteKit – dynamic (env object)
-import { env } from '$env/dynamic/private';
-import { env } from '$env/dynamic/public';
-env.MY_KEY
-const { MY_KEY } = env
-const { MY_KEY: alias, OTHER_KEY = "fallback" } = env
+import { env } from "$env/dynamic/private";
+import { env } from "$env/dynamic/public";
+env.MY_KEY;
+const { MY_KEY } = env;
+const { MY_KEY: alias, OTHER_KEY = "fallback" } = env;
 
 // SvelteKit – dynamic (any alias name works)
-import { env as anyName } from '$env/dynamic/private';
-import { env as anyName } from '$env/dynamic/public';
-anyName.MY_KEY
-const { MY_KEY } = anyName
+import { env as anyName } from "$env/dynamic/private";
+import { env as anyName } from "$env/dynamic/public";
+anyName.MY_KEY;
+const { MY_KEY } = anyName;
 
 // Multiple aliased imports in the same file are also supported:
-import { env as publicEnv } from '$env/dynamic/public';
-import { env as privateEnv } from '$env/dynamic/private';
-publicEnv.PUBLIC_API_URL
-privateEnv.SECRET_KEY
+import { env as publicEnv } from "$env/dynamic/public";
+import { env as privateEnv } from "$env/dynamic/private";
+publicEnv.PUBLIC_API_URL;
+privateEnv.SECRET_KEY;
 
 // SvelteKit – static (named imports)
-import { MY_KEY } from '$env/static/private';
-import { MY_KEY } from '$env/static/public';
-import { MY_KEY as alias } from '$env/static/private';
-MY_KEY
+import { MY_KEY } from "$env/static/private";
+import { MY_KEY } from "$env/static/public";
+import { MY_KEY as alias } from "$env/static/private";
+MY_KEY;
 ```
 
 Only `UPPER_CASE` key names are matched, which is the standard convention for environment variables.
@@ -191,6 +200,7 @@ The extension intentionally skips:
 
 - `.env.local`, `.env.production` etc. are not resolved — only `.env`
 - Template literal expressions are scanned, but dynamic key access is not supported:
+
 ```typescript
-  process.env[`MY_${suffix}`] // not detected
+process.env[`MY_${suffix}`]; // not detected
 ```
