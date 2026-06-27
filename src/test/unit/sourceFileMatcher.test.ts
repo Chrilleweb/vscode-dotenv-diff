@@ -1,5 +1,8 @@
 import * as assert from "assert";
-import { isSourceFilePath } from "../../core/sourceFileMatcher";
+import {
+  isSourceFilePath,
+  isInExcludedDirectory,
+} from "../../core/sourceFileMatcher";
 
 suite("sourceFileMatcher", () => {
   test("matches supported source file extensions", () => {
@@ -29,5 +32,42 @@ suite("sourceFileMatcher", () => {
     assert.strictEqual(isSourceFilePath("src/app.spec.ts"), false);
     assert.strictEqual(isSourceFilePath("src/app.spec.js"), false);
     assert.strictEqual(isSourceFilePath("src/app.spec.svelte"), false);
+  });
+
+  test("excludes files inside node_modules and build-output directories", () => {
+    assert.strictEqual(
+      isSourceFilePath("node_modules/dotenv/lib/main.js"),
+      false,
+    );
+    assert.strictEqual(
+      isSourceFilePath("project/node_modules/styled-components/dist/index.js"),
+      false,
+    );
+    assert.strictEqual(
+      isSourceFilePath("C:\\repo\\node_modules\\dotenv\\lib\\main.js"),
+      false,
+    );
+    assert.strictEqual(isSourceFilePath("dist/app.js"), false);
+    assert.strictEqual(isSourceFilePath("build/app.js"), false);
+    assert.strictEqual(isSourceFilePath("out/app.js"), false);
+    assert.strictEqual(isSourceFilePath(".next/server/app.js"), false);
+  });
+
+  test("does not exclude source files whose name merely contains a segment word", () => {
+    assert.strictEqual(isSourceFilePath("src/distribute.ts"), true);
+    assert.strictEqual(isSourceFilePath("src/outbox.ts"), true);
+  });
+
+  test("isInExcludedDirectory detects excluded path segments", () => {
+    assert.strictEqual(
+      isInExcludedDirectory("project/node_modules/pkg/index.js"),
+      true,
+    );
+    assert.strictEqual(
+      isInExcludedDirectory("C:\\repo\\dist\\bundle.js"),
+      true,
+    );
+    assert.strictEqual(isInExcludedDirectory("src/app.ts"), false);
+    assert.strictEqual(isInExcludedDirectory("src/distribute.ts"), false);
   });
 });
