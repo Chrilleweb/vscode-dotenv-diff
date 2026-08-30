@@ -18,20 +18,28 @@ export const DEFAULT_EXCLUDE_KEYS = [
   "DEV",
   "SSR",
   "DOTENV_KEY",
-  'CI',
-  'GITHUB_ACTIONS',
-  'INIT_CWD',
-  'TZ',
-  'PORT',
-  'PATH',
-  'HOME',
-  'USER',
-  'SHELL',
-  'LANG',
-  'TMP',
-  'TEMP',
-  'TMPDIR',
-  'NODE_PATH',
+  "CI",
+  "GITHUB_ACTIONS",
+  "INIT_CWD",
+  "TZ",
+  "PORT",
+  "PATH",
+  "HOME",
+  "USER",
+  "SHELL",
+  "LANG",
+  "TMP",
+  "TEMP",
+  "TMPDIR",
+  "NODE_PATH",
+  "LAMBDA_TASK_ROOT",
+  "JEST_WORKER_ID",
+  "K_SERVICE",
+  "NODE_DEBUG",
+  "VERCEL",
+  "CF_PAGES",
+  "FUNCTIONS_WORKER_RUNTIME",
+  "NETLIFY",
 ] as const;
 
 /**
@@ -55,10 +63,10 @@ export const SOURCE_FILE_GLOB = `**/*.{${SOURCE_FILE_EXTENSIONS.replace(/\|/g, "
 
 /**
  * Glob pattern for excluding files from workspace scanning.
- * Excludes node_modules and test/spec files.
+ * Excludes dependency/build output folders and test/spec files.
  * Derived from SOURCE_FILE_EXTENSIONS.
  */
-export const EXCLUDE_FILE_GLOB = `{**/node_modules/**,**/*.test.+(${SOURCE_FILE_EXTENSIONS}),**/*.spec.+(${SOURCE_FILE_EXTENSIONS})}`;
+export const EXCLUDE_FILE_GLOB = `{**/node_modules/**,**/dist/**,**/build/**,**/out/**,**/.next/**,**/.svelte-kit/**,**/.vercel/**,**/.netlify/**,**/.output/**,**/.turbo/**,**/coverage/**,**/*.test.+(${SOURCE_FILE_EXTENSIONS}),**/*.spec.+(${SOURCE_FILE_EXTENSIONS})}`;
 
 /**
  * Matches process.env.KEY references in source code.
