@@ -51,6 +51,21 @@ suite("sourceFileMatcher", () => {
     assert.strictEqual(isSourceFilePath("build/app.js"), false);
     assert.strictEqual(isSourceFilePath("out/app.js"), false);
     assert.strictEqual(isSourceFilePath(".next/server/app.js"), false);
+    assert.strictEqual(
+      isSourceFilePath(".svelte-kit/output/server/index.js"),
+      false,
+    );
+    assert.strictEqual(
+      isSourceFilePath(".vercel/output/functions/index.js"),
+      false,
+    );
+    assert.strictEqual(isSourceFilePath(".netlify/functions/main.js"), false);
+    assert.strictEqual(isSourceFilePath(".output/server/index.mjs"), false);
+    assert.strictEqual(isSourceFilePath(".turbo/cache/task.js"), false);
+    assert.strictEqual(
+      isSourceFilePath("coverage/lcov-report/sorter.js"),
+      false,
+    );
   });
 
   test("does not exclude source files whose name merely contains a segment word", () => {
@@ -65,6 +80,14 @@ suite("sourceFileMatcher", () => {
     );
     assert.strictEqual(
       isInExcludedDirectory("C:\\repo\\dist\\bundle.js"),
+      true,
+    );
+    assert.strictEqual(
+      isInExcludedDirectory("project/.svelte-kit/output/server/index.js"),
+      true,
+    );
+    assert.strictEqual(
+      isInExcludedDirectory("project/.vercel/output/functions/index.js"),
       true,
     );
     assert.strictEqual(isInExcludedDirectory("src/app.ts"), false);

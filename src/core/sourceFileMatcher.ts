@@ -6,7 +6,19 @@ import { SOURCE_FILE_EXTENSIONS } from "./constants";
  * process.env.* references such as DOTENV_CONFIG_QUIET (from `dotenv`) or
  * SC_ATTR (from `styled-components`) and must not be scanned.
  */
-const EXCLUDED_PATH_SEGMENTS = ["node_modules", "dist", "build", "out", ".next"];
+const EXCLUDED_PATH_SEGMENTS = [
+  "node_modules",
+  "dist",
+  "build",
+  "out",
+  ".next",
+  ".svelte-kit",
+  ".vercel",
+  ".netlify",
+  ".output",
+  ".turbo",
+  "coverage",
+];
 
 /**
  * Helper function to determine if a file path points to a supported source file.

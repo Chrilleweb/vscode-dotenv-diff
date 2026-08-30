@@ -51,7 +51,9 @@ export async function activate(
     lastDiagnosticsRefreshAt = Date.now();
   };
 
-  const scheduleDiagnosticsRefresh = (mode: "immediate" | "debounced" = "debounced") => {
+  const scheduleDiagnosticsRefresh = (
+    mode: "immediate" | "debounced" = "debounced",
+  ) => {
     if (mode === "immediate") {
       if (diagnosticsRefreshTimer) {
         clearTimeout(diagnosticsRefreshTimer);
@@ -84,7 +86,18 @@ export async function activate(
     }, DIAGNOSTICS_DEBOUNCE_MS);
   };
 
-  const envCompletionProvider = createEnvCompletionProvider(workspaceFileContents);
+  const envCompletionProvider = createEnvCompletionProvider(
+    workspaceFileContents,
+  );
+
+  const isTrackedDocument = (doc: vscode.TextDocument): boolean => {
+    if (isInExcludedDirectory(doc.fileName)) {
+      return false;
+    }
+
+    // Ignore documents outside the current workspace to avoid cross-project suggestions.
+    return Boolean(vscode.workspace.getWorkspaceFolder(doc.uri));
+  };
 
   let autoSuggestTimer: NodeJS.Timeout | undefined;
 
@@ -149,7 +162,7 @@ export async function activate(
 
   context.subscriptions.push(
     vscode.workspace.onDidOpenTextDocument((doc) => {
-      if (isInExcludedDirectory(doc.fileName)) {
+      if (!isTrackedDocument(doc)) {
         return;
       }
 
@@ -165,7 +178,7 @@ export async function activate(
         return;
       }
 
-      if (isInExcludedDirectory(e.document.fileName)) {
+      if (!isTrackedDocument(e.document)) {
         return;
       }
 
@@ -183,7 +196,7 @@ export async function activate(
       triggerEnvSuggestionsIfNeeded(event.textEditor);
     }),
     vscode.workspace.onDidCloseTextDocument((doc) => {
-      if (isInExcludedDirectory(doc.fileName)) {
+      if (!isTrackedDocument(doc)) {
         collection.delete(doc.uri);
         return;
       }
@@ -200,7 +213,7 @@ export async function activate(
       scheduleDiagnosticsRefresh("immediate");
     }),
     vscode.workspace.onDidSaveTextDocument((doc) => {
-      if (isInExcludedDirectory(doc.fileName)) {
+      if (!isTrackedDocument(doc)) {
         return;
       }
 
